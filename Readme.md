@@ -1,7 +1,7 @@
 # Проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Dmitriy Kuzmin](https://up.htmlacademy.ru/ecmascript/13/user/1346835).
-* Наставник: [Даниил Царёв](https://htmlacademy.ru/profile/id945835).
+* Наставник:
 
 ---
 
