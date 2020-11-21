@@ -1,13 +1,13 @@
-import {createTripInfoBlock} from './view/trip-info.js';
-import {createTripTabsSwitcher} from './view/trip-tabs.js';
-import {createTripFilters} from './view/trip-filters.js';
-import {createTripSortForm} from './view/trip-sort.js';
-import {createEventsList} from './view/events-list.js';
-import {createNewEvent} from './view/event-create.js';
-import {editEvent} from './view/event-edit.js';
-import {createTripEvent} from './view/trip-event.js';
+import {createInfoBlockTemplate} from './view/trip-info.js';
+import {createTabsSwitcherTemplate} from './view/trip-tabs.js';
+import {createFiltersTemplate} from './view/trip-filters.js';
+import {createSortTemplate} from './view/trip-sort.js';
+import {createEventsListTemplate} from './view/events-list.js';
+import {createNewEventTemplate} from './view/event-create.js';
+import {createEventEditorTemplate} from './view/event-edit.js';
+import {createEventTemplate} from './view/trip-event.js';
 
-const render = (container, template, place) => {
+const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
@@ -15,12 +15,12 @@ const render = (container, template, place) => {
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 
-render(tripMainElement, createTripInfoBlock(), `afterbegin`);
+render(tripMainElement, createInfoBlockTemplate(), `afterbegin`);
 
 // добавляем блоки "Меню" и "Фильтры"
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripControlsTitles = tripControlsElement.querySelectorAll(`h2`);
-const tripControls = [createTripTabsSwitcher(), createTripFilters()];
+const tripControls = [createTabsSwitcherTemplate(), createFiltersTemplate()];
 
 tripControlsTitles.forEach((title, i) => {
   render(title, tripControls[i], `afterend`);
@@ -30,20 +30,20 @@ tripControlsTitles.forEach((title, i) => {
 const siteMainElement = document.querySelector(`.page-main`);
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 
-render(tripEventsElement, createTripSortForm(), `beforeend`);
+render(tripEventsElement, createSortTemplate());
 
 // создаем список точек маршрута
-render(tripEventsElement, createEventsList(), `beforeend`);
+render(tripEventsElement, createEventsListTemplate());
 
 // добавляем блок "Добавить точку маршрута"
 const eventsList = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(eventsList, createNewEvent(), `afterbegin`);
+render(eventsList, createNewEventTemplate(), `afterbegin`);
 
 // добавляем блок "Редактировать точку маршрута"
-render(eventsList, editEvent(), `afterbegin`);
+render(eventsList, createEventEditorTemplate(), `afterbegin`);
 
 // добавляем 3 блока "Точка маршрута"
-render(eventsList, createTripEvent(), `beforeend`);
-render(eventsList, createTripEvent(), `beforeend`);
-render(eventsList, createTripEvent(), `beforeend`);
+render(eventsList, createEventTemplate());
+render(eventsList, createEventTemplate());
+render(eventsList, createEventTemplate());
