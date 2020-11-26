@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomValue, getRandomElement} from '../util.js';
+import {getRandomValue, getRandomElement, getPartialArray} from '../util.js';
 import {destinationsNames} from './destination.js';
 import {generateOffersNames} from './offers.js';
 
@@ -22,7 +22,7 @@ const generateDate = () => {
 
 export const generateWaypoint = () => {
   const type = getRandomElement(types);
-  const offers = generateOffersNames(type);
+  const offers = getPartialArray(generateOffersNames(type));
 
   return {
     type,

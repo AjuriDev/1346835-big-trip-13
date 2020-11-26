@@ -2,17 +2,17 @@ import {createInfoBlockTemplate} from './view/trip-info.js';
 import {createTabsSwitcherTemplate} from './view/trip-tabs.js';
 import {createFiltersTemplate} from './view/trip-filters.js';
 import {createSortTemplate} from './view/trip-sort.js';
-import {createEventsListTemplate} from './view/events-list.js';
-import {createNewEventTemplate} from './view/event-create.js';
-import {createEventEditorTemplate} from './view/event-edit.js';
-import {createEventTemplate} from './view/trip-event.js';
+import {createWaypointsListTemplate} from './view/waypoints-list.js';
+import {createNewWaypointTemplate} from './view/waypoint-create.js';
+import {createWaypointEditorTemplate} from './view/waypoint-edit.js';
+import {createWaypointTemplate} from './view/trip-waypoint.js';
 import {generateWaypoint} from './mock/waypoint.js';
-import {generateDestination} from './mock/destination.js';
-import {offers} from './mock/offers.js';
+// import {generateDestination} from './mock/destination.js';
+// import {offers} from './mock/offers.js';
 
-const WAYPOINTS_NUMBER = 20;
+const WAYPOINTS_NUMBER = 10;
 const waypoints = Array(WAYPOINTS_NUMBER).fill().map(generateWaypoint);
-const destinations = [`Amsterdam`, `Geneva`, `Chamonix`].map(generateDestination);
+// const destinations = [`Amsterdam`, `Geneva`, `Chamonix`].map(generateDestination);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -35,22 +35,25 @@ tripControlsTitles.forEach((title, i) => {
 
 // добавляем блок "Сортировка"
 const siteMainElement = document.querySelector(`.page-main`);
-const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
+const tripWaypointsElement = siteMainElement.querySelector(`.trip-events`);
 
-render(tripEventsElement, createSortTemplate());
+render(tripWaypointsElement, createSortTemplate());
 
 // создаем список точек маршрута
-render(tripEventsElement, createEventsListTemplate());
+render(tripWaypointsElement, createWaypointsListTemplate());
 
 // добавляем блок "Добавить точку маршрута"
-const eventsList = tripEventsElement.querySelector(`.trip-events__list`);
+const waypointsList = tripWaypointsElement.querySelector(`.trip-events__list`);
 
-render(eventsList, createNewEventTemplate(), `afterbegin`);
+render(waypointsList, createNewWaypointTemplate(), `afterbegin`);
 
 // добавляем блок "Редактировать точку маршрута"
-render(eventsList, createEventEditorTemplate(), `afterbegin`);
+render(waypointsList, createWaypointEditorTemplate(), `afterbegin`);
 
 // добавляем 3 блока "Точка маршрута"
-render(eventsList, createEventTemplate());
-render(eventsList, createEventTemplate());
-render(eventsList, createEventTemplate());
+// render(waypointsList, createWaypointTemplate());
+// render(waypointsList, createWaypointTemplate());
+// render(waypointsList, createWaypointTemplate());
+waypoints.forEach((waypoint) => {
+  render(waypointsList, createWaypointTemplate(waypoint));
+});
