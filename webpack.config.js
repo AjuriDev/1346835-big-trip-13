@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: [
+    './src/util.js',
     './src/view/trip-info.js',
     './src/view/trip-tabs.js',
     './src/view/trip-filters.js',
@@ -10,6 +11,7 @@ module.exports = {
     './src/view/event-create.js',
     './src/view/event-edit.js',
     './src/view/trip-event.js',
+    './src/mock/waypoint.js',
     './src/main.js',
   ],
   output: {

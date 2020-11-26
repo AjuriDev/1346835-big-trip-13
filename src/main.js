@@ -6,6 +6,13 @@ import {createEventsListTemplate} from './view/events-list.js';
 import {createNewEventTemplate} from './view/event-create.js';
 import {createEventEditorTemplate} from './view/event-edit.js';
 import {createEventTemplate} from './view/trip-event.js';
+import {generateWaypoint} from './mock/waypoint.js';
+import {generateDestination} from './mock/destination.js';
+import {offers} from './mock/offers.js';
+
+const WAYPOINTS_NUMBER = 20;
+const waypoints = Array(WAYPOINTS_NUMBER).fill().map(generateWaypoint);
+const destinations = [`Amsterdam`, `Geneva`, `Chamonix`].map(generateDestination);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
