@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const getRandomValue = (max, min = 0) => {
   let rand = min + Math.random() * ((max + 1) - min);
   return Math.floor(rand);
@@ -47,4 +49,15 @@ const getPartialArray = (arr, minLength = 0, maxLength = arr.length, isUnique = 
   return array;
 };
 
-export {getRandomValue, getRandomElement, getPartialArray};
+const humanizeDate = (date, format) => {
+  if (date) {
+    return dayjs(date).format(format);
+  }
+  return ``;
+};
+
+const isInclude = (item, arr) => {
+  return arr.includes(item);
+};
+
+export {getRandomValue, getRandomElement, getPartialArray, humanizeDate, isInclude};

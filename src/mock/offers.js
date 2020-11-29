@@ -1,26 +1,31 @@
 const offers = [
   {
     types: [`Flight`],
+    id: `luggage`,
     name: `Add luggage`,
     price: 30
   },
   {
     types: [`Flight`],
+    id: `comfort`,
     name: `Switch to comfort`,
     price: 80
   },
   {
     types: [`Flight`],
+    id: `meal`,
     name: `Add meal`,
     price: 15
   },
   {
     types: [`Flight`],
+    id: `seats`,
     name: `Choose seats`,
     price: 5
   },
   {
     types: [`Flight`],
+    id: `train`,
     name: `Travel by train`,
     price: 40
   },
@@ -52,9 +57,9 @@ const offers = [
 ];
 
 const generateOffersNames = (type) => {
-  return offers.
-  filter((offer) => offer.types.includes(type)).
-  map((offer) => offer.name);
+  return offers
+  .filter((offer) => offer.types.includes(type))
+  .map((offer) => offer.name);
 };
 
 export {offers, generateOffersNames};
