@@ -12,7 +12,10 @@ const getTripCost = (waypoints) => {
   waypoints.forEach((waypoint) => {
     cost += waypoint.price;
     offers.forEach((offer) => {
-      isInclude(offer.name, waypoint.offers) ? cost += offer.price : cost;
+      if (isInclude(offer.name, waypoint.offers)) {
+        cost += offer.price;
+      }
+      // isInclude(offer.name, waypoint.offers) ? cost += offer.price : cost;
     });
   });
 
@@ -24,17 +27,17 @@ const createInfoTitleTemplate = (waypoints) => {
 
   return (`
     <h1 class="trip-info__title">${route}</h1>
-  `)
+  `);
 };
 
 const createInfoDateTemplate = (waypoints) => {
   const startDate = dayjs(waypoints[0].date.start).format(`MMM DD`);
   const closeDate = dayjs(waypoints[waypoints.length - 1].date.close).format(`MMM DD`);
-  const tripDuration = isSameMonth(startDate, closeDate) ? closeDate.slice(4) : closeDate
+  const tripDuration = isSameMonth(startDate, closeDate) ? closeDate.slice(4) : closeDate;
 
   return (`
     <p class="trip-info__dates">${startDate}&nbsp;&mdash;&nbsp;${tripDuration}</p>
-  `)
+  `);
 };
 
 const createInfoCostTemplate = (waypoints) => {
@@ -44,7 +47,7 @@ const createInfoCostTemplate = (waypoints) => {
     <p class="trip-info__cost">
       Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
     </p>
-  `)
+  `);
 };
 
 const createInfoBlockTemplate = (waypoints) => {
