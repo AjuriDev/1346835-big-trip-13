@@ -7,7 +7,6 @@ import {createWaypointsListTemplate} from './view/waypoints-list.js';
 import {createWaypointEditorTemplate} from './view/waypoint-edit.js';
 import {createWaypointTemplate} from './view/trip-waypoint.js';
 import {generateWaypoint} from './mock/waypoint.js';
-// import {offers} from './mock/offers.js';
 
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)
@@ -27,7 +26,7 @@ const render = (container, template, place = `beforeend`) => {
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 
-render(tripMainElement, createInfoBlockTemplate(), `afterbegin`);
+render(tripMainElement, createInfoBlockTemplate(waypoints), `afterbegin`);
 
 // добавляем блоки "Меню" и "Фильтры"
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
