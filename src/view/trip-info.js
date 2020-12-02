@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {offers} from '../mock/offers.js';
+import {getOffers} from '../mock/offers.js';
 
 const MONTH_LETTERS_NUMBER = 3;
 const MONTH_DROP_LETTERS_NUMBER = 4;
@@ -13,6 +13,7 @@ const getTripCost = (waypoints) => {
 
   waypoints.forEach((waypoint) => {
     cost += waypoint.price;
+    const offers = getOffers(waypoint.type);
     offers.forEach((offer) => {
       if (waypoint.offers.includes(offer.name)) {
         cost += offer.price;

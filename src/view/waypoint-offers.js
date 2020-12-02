@@ -1,7 +1,8 @@
-import {offers} from '../mock/offers.js';
+import {getOffers} from '../mock/offers.js';
 
-const createWaypointOffersTemplate = (offersNames) => {
+const createWaypointOffersTemplate = (type, offersNames) => {
   let offersList = ``;
+  const offers = getOffers(type);
   offers.forEach((offer) => {
     if (offersNames.includes(offer.name)) {
       offersList += (`
@@ -31,10 +32,8 @@ const createOfferTemplate = (offer, waypointOffers) => {
 };
 
 const createOffersSectionTemplate = (type, waypointOffers) => {
-  const options = offers
-    .filter((offer) => offer.types.includes(type))
-    .map((offer) => createOfferTemplate(offer, waypointOffers))
-    .join(``);
+  const offers = getOffers(type);
+  const options = offers.map((offer) => createOfferTemplate(offer, waypointOffers)).join(``);
 
   return (`
     <section class="event__section  event__section--offers">

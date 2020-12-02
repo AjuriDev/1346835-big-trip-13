@@ -20,7 +20,7 @@ const createWaypointTemplate = (waypoint) => {
   const favoriteClassName = isFavorites
     ? `event__favorite-btn event__favorite-btn--active`
     : `event__favorite-btn`;
-  const offersList = createWaypointOffersTemplate(offers);
+  const offersList = createWaypointOffersTemplate(type, offers);
   const shedule = createScheduleTemplate(startDate, closeDate);
 
   return (`

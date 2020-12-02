@@ -22,7 +22,6 @@ const generateDate = () => {
 const generateWaypoint = () => {
   const type = getRandomElement(TYPES);
   const offers = getPartialArray(generateOffersNames(type));
-
   return {
     type,
     destination: getRandomElement(DESTINATION_NAMES),
