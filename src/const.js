@@ -1,8 +1,8 @@
 import {generateDestination} from './mock/destination.js';
 
-const types = [`Check-in`, `Sightseeing`, `Restaurant`, `Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
-const defaultType = `Flight`;
-const destinationsNames = [`Amsterdam`, `Geneva`, `Chamonix`];
-const destinations = [`Amsterdam`, `Geneva`, `Chamonix`].map(generateDestination);
+const TYPES = [`Check-in`, `Sightseeing`, `Restaurant`, `Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
+const DEFAULT_TYPE = `Flight`;
+const DESTINATION_NAMES = [`Amsterdam`, `Geneva`, `Chamonix`];
+const destinations = DESTINATION_NAMES.map(generateDestination);
 
-export {types, defaultType, destinationsNames, destinations};
+export {TYPES, DEFAULT_TYPE, DESTINATION_NAMES, destinations};

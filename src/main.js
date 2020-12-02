@@ -59,5 +59,3 @@ render(waypointsList, createWaypointEditorTemplate(waypoints[0]), `afterbegin`);
 waypoints.forEach((waypoint) => {
   render(waypointsList, createWaypointTemplate(waypoint));
 });
-
-// console.log(waypoints);

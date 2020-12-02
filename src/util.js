@@ -56,8 +56,4 @@ const humanizeDate = (date, format) => {
   return ``;
 };
 
-const isInclude = (item, arr) => {
-  return arr.includes(item);
-};
-
-export {getRandomValue, getRandomElement, getPartialArray, humanizeDate, isInclude};
+export {getRandomValue, getRandomElement, getPartialArray, humanizeDate};

@@ -1,5 +1,4 @@
 import {offers} from '../mock/offers.js';
-import {isInclude} from '../util.js';
 
 const createWaypointOffersTemplate = (offersNames) => {
   let offersList = ``;
@@ -21,7 +20,7 @@ const createWaypointOffersTemplate = (offersNames) => {
 const createOfferTemplate = (offer, waypointOffers) => {
   return (`
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}"${isInclude(offer.name, waypointOffers) ? ` checked` : ``}>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}"${waypointOffers.includes(offer.name) ? ` checked` : ``}>
       <label class="event__offer-label" for="event-offer-${offer.id}-1">
         <span class="event__offer-title">${offer.name}</span>
         &plus;&euro;&nbsp;

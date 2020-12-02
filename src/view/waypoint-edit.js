@@ -3,12 +3,12 @@ import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
 import {createOffersSectionTemplate} from './waypoint-offers.js';
 import {createDestinationSectionTemplate} from './waypoint-destination.js';
-import {defaultType} from '../const.js';
+import {DEFAULT_TYPE} from '../const.js';
 
 const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}}) => {
 
   const {
-    type = defaultType,
+    type = DEFAULT_TYPE,
     destination = ``,
     offers = [],
     date: {start: startDate, close: closeDate},

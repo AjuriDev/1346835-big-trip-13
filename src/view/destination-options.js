@@ -1,4 +1,4 @@
-import {destinationsNames} from '../const.js';
+import {DESTINATION_NAMES} from '../const.js';
 
 const createOptionTemplate = (destinationName) => {
   return (`
@@ -7,7 +7,7 @@ const createOptionTemplate = (destinationName) => {
 };
 
 const createDestinationOptionsTemplate = () => {
-  const options = destinationsNames.map((destinationName) => createOptionTemplate(destinationName)).join(``);
+  const options = DESTINATION_NAMES.map(createOptionTemplate).join(``);
   return (`
     <datalist id="destination-list-1">
       ${options}

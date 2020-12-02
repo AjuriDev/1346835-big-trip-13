@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import {offers} from '../mock/offers.js';
-import {isInclude} from '../util.js';
+
+const MONTH_LETTERS_NUMBER = 3;
+const MONTH_DROP_LETTERS_NUMBER = 4;
 
 const isSameMonth = (start, close) => {
-  return start.slice(0, 3) === close.slice(0, 3) ? true : false;
+  return start.slice(0, MONTH_LETTERS_NUMBER) === close.slice(0, MONTH_LETTERS_NUMBER) ? true : false;
 };
 
 const getTripCost = (waypoints) => {
@@ -12,10 +14,9 @@ const getTripCost = (waypoints) => {
   waypoints.forEach((waypoint) => {
     cost += waypoint.price;
     offers.forEach((offer) => {
-      if (isInclude(offer.name, waypoint.offers)) {
+      if (waypoint.offers.includes(offer.name)) {
         cost += offer.price;
       }
-      // isInclude(offer.name, waypoint.offers) ? cost += offer.price : cost;
     });
   });
 
@@ -33,7 +34,7 @@ const createInfoTitleTemplate = (waypoints) => {
 const createInfoDateTemplate = (waypoints) => {
   const startDate = dayjs(waypoints[0].date.start).format(`MMM DD`);
   const closeDate = dayjs(waypoints[waypoints.length - 1].date.close).format(`MMM DD`);
-  const tripDuration = isSameMonth(startDate, closeDate) ? closeDate.slice(4) : closeDate;
+  const tripDuration = isSameMonth(startDate, closeDate) ? closeDate.slice(MONTH_DROP_LETTERS_NUMBER) : closeDate;
 
   return (`
     <p class="trip-info__dates">${startDate}&nbsp;&mdash;&nbsp;${tripDuration}</p>

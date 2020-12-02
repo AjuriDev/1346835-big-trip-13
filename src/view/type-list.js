@@ -1,4 +1,4 @@
-import {types} from '../const.js';
+import {TYPES} from '../const.js';
 
 const createWaypointTypeItemTemplate = (type, selectedType) => {
   return (`
@@ -10,7 +10,7 @@ const createWaypointTypeItemTemplate = (type, selectedType) => {
 };
 
 const createWaypointTypeListTemplate = (selectedType) => {
-  const typeItems = types.map((type) => createWaypointTypeItemTemplate(type, selectedType)).join(``);
+  const typeItems = TYPES.map((type) => createWaypointTypeItemTemplate(type, selectedType)).join(``);
 
   return (`
     <div class="event__type-list">
