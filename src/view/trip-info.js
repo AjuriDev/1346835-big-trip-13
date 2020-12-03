@@ -15,9 +15,7 @@ const getTripCost = (waypoints) => {
     cost += waypoint.price;
     const offers = getOffers(waypoint.type);
     offers.forEach((offer) => {
-      if (waypoint.offers.includes(offer.name)) {
-        cost += offer.price;
-      }
+      cost += waypoint.offers.includes(offer.name) ? offer.price : 0;
     });
   });
 

@@ -1,5 +1,26 @@
 import dayjs from 'dayjs';
 
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterend`
+};
+
+const renderElement = (container, element, place = RenderPosition.BEFOREEND) => {
+  switch (place){
+    case RenderPosition.BEFOREEND:
+      container.prepend(element);
+      break;
+    case RenderPosition.AFTERBEGIN:
+      container.append(element);
+      break;
+  }
+};
+
+const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
+  container.insertAdjacentHTML(place, template);
+};
+
 const getRandomValue = (max, min = 0) => {
   let rand = min + Math.random() * ((max + 1) - min);
   return Math.floor(rand);
@@ -56,4 +77,12 @@ const humanizeDate = (date, format) => {
   return ``;
 };
 
-export {getRandomValue, getRandomElement, getPartialArray, humanizeDate};
+export {
+  getRandomValue,
+  getRandomElement,
+  getPartialArray,
+  humanizeDate,
+  renderTemplate,
+  renderElement,
+  RenderPosition
+};

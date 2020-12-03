@@ -7,6 +7,7 @@ import {createWaypointsListTemplate} from './view/waypoints-list.js';
 import {createWaypointEditorTemplate} from './view/waypoint-edit.js';
 import {createWaypointTemplate} from './view/trip-waypoint.js';
 import {generateWaypoint} from './mock/waypoint.js';
+import {renderTemplate, RenderPosition} from './util.js';
 
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)
@@ -18,15 +19,11 @@ const waypoints = Array(WAYPOINTS_NUMBER)
     return startA.diff(startB);
   });
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 // добавляем блок "Маршрут и стоимость"
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 
-render(tripMainElement, createInfoBlockTemplate(waypoints), `afterbegin`);
+renderTemplate(tripMainElement, createInfoBlockTemplate(waypoints), RenderPosition.AFTERBEGIN);
 
 // добавляем блоки "Меню" и "Фильтры"
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
@@ -34,28 +31,28 @@ const tripControlsTitles = tripControlsElement.querySelectorAll(`h2`);
 const tripControls = [createTabsSwitcherTemplate(), createFiltersTemplate()];
 
 tripControlsTitles.forEach((title, i) => {
-  render(title, tripControls[i], `afterend`);
+  renderTemplate(title, tripControls[i], RenderPosition.AFTEREND);
 });
 
 // добавляем блок "Сортировка"
 const siteMainElement = document.querySelector(`.page-main`);
 const tripWaypointsElement = siteMainElement.querySelector(`.trip-events`);
 
-render(tripWaypointsElement, createSortTemplate());
+renderTemplate(tripWaypointsElement, createSortTemplate());
 
 // создаем список точек маршрута
-render(tripWaypointsElement, createWaypointsListTemplate());
+renderTemplate(tripWaypointsElement, createWaypointsListTemplate());
 
 // добавляем блок "Добавить точку маршрута"
 const waypointsList = tripWaypointsElement.querySelector(`.trip-events__list`);
 
-render(waypointsList, createWaypointEditorTemplate(), `afterbegin`);
+renderTemplate(waypointsList, createWaypointEditorTemplate(), RenderPosition.AFTERBEGIN);
 
 // добавляем блок "Редактировать точку маршрута"
-render(waypointsList, createWaypointEditorTemplate(waypoints[0]), `afterbegin`);
+renderTemplate(waypointsList, createWaypointEditorTemplate(waypoints[0]), RenderPosition.AFTERBEGIN);
 
 // добавляем 3 блока "Точка маршрута"
 
 waypoints.forEach((waypoint) => {
-  render(waypointsList, createWaypointTemplate(waypoint));
+  renderTemplate(waypointsList, createWaypointTemplate(waypoint));
 });
