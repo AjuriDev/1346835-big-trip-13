@@ -7,7 +7,7 @@ const RenderPosition = {
 };
 
 const renderElement = (container, element, place = RenderPosition.BEFOREEND) => {
-  switch (place){
+  switch (place) {
     case RenderPosition.BEFOREEND:
       container.prepend(element);
       break;
@@ -19,6 +19,13 @@ const renderElement = (container, element, place = RenderPosition.BEFOREEND) => 
 
 const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
   container.insertAdjacentHTML(place, template);
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`); // 1
+  newElement.innerHTML = template; // 2
+
+  return newElement.firstChild; // 3
 };
 
 const getRandomValue = (max, min = 0) => {
@@ -83,6 +90,7 @@ export {
   getPartialArray,
   humanizeDate,
   renderTemplate,
+  createElement,
   renderElement,
   RenderPosition
 };

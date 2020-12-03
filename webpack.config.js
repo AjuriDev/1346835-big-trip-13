@@ -7,6 +7,7 @@ module.exports = {
     './src/view/trip-info.js',
     './src/view/trip-tabs.js',
     './src/view/trip-filters.js',
+    './view/trip-controls.js',
     './src/view/trip-sort.js',
     './src/view/type-list.js',
     './src/view/waypoints-list.js',

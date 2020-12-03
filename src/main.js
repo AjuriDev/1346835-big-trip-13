@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import {createInfoBlockTemplate} from './view/trip-info.js';
-import {createTabsSwitcherTemplate} from './view/trip-tabs.js';
-import {createFiltersTemplate} from './view/trip-filters.js';
+import {createTripControlsTemplate} from './view/trip-controls.js';
 import {createSortTemplate} from './view/trip-sort.js';
 import {createWaypointsListTemplate} from './view/waypoints-list.js';
 import {createWaypointEditorTemplate} from './view/waypoint-edit.js';
@@ -26,13 +25,8 @@ const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 renderTemplate(tripMainElement, createInfoBlockTemplate(waypoints), RenderPosition.AFTERBEGIN);
 
 // добавляем блоки "Меню" и "Фильтры"
-const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
-const tripControlsTitles = tripControlsElement.querySelectorAll(`h2`);
-const tripControls = [createTabsSwitcherTemplate(), createFiltersTemplate()];
 
-tripControlsTitles.forEach((title, i) => {
-  renderTemplate(title, tripControls[i], RenderPosition.AFTEREND);
-});
+renderTemplate(tripMainElement, createTripControlsTemplate());
 
 // добавляем блок "Сортировка"
 const siteMainElement = document.querySelector(`.page-main`);
