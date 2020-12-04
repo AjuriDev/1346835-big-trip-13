@@ -6,7 +6,7 @@ const RenderPosition = {
   AFTEREND: `afterend`
 };
 
-const renderElement = (container, element, place = RenderPosition.BEFOREEND) => {
+const render = (container, element, place = RenderPosition.BEFOREEND) => {
   switch (place) {
     case RenderPosition.BEFOREEND:
       container.prepend(element);
@@ -22,10 +22,10 @@ const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) =
 };
 
 const createElement = (template) => {
-  const newElement = document.createElement(`div`); // 1
-  newElement.innerHTML = template; // 2
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
 
-  return newElement.firstChild; // 3
+  return newElement.firstChild;
 };
 
 const getRandomValue = (max, min = 0) => {
@@ -91,6 +91,6 @@ export {
   humanizeDate,
   renderTemplate,
   createElement,
-  renderElement,
+  render,
   RenderPosition
 };

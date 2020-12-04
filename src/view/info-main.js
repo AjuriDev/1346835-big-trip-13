@@ -1,16 +1,16 @@
 import {createElement} from '../util.js';
 
-const createTripControlsTemplate = () => {
-  return `<div class="trip-main__trip-controls  trip-controls"></div>`;
+const createInfoMainTemplate = () => {
+  return `<div class="trip-info__main"></div>`;
 };
 
-export default class TripControls {
+export default class InfoMain {
   constructor() {
     this._element = null;
   }
 
   _getTemplate() {
-    return createTripControlsTemplate();
+    return createInfoMainTemplate();
   }
 
   getElement() {
