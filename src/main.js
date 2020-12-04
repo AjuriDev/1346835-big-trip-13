@@ -62,15 +62,32 @@ render(tripWaypointsElement, waypointsList.getElement());
 
 render(tripWaypointsElement, new TripSortView().getElement());
 
-// добавляем блок "Добавить точку маршрута"
-
-render(waypointsList.getElement(), new WaypointEditorView(waypoints[0]).getElement(), RenderPosition.AFTERBEGIN);
-
-// добавляем блок "Редактировать точку маршрута"
-render(waypointsList.getElement(), new WaypointEditorView().getElement(), RenderPosition.AFTERBEGIN);
-
 // добавляем блоки "Точка маршрута"
 
+const renderWaypoint = (waypointsListElement, waypoint) => {
+  const waypointComponent = new TripWaypointView(waypoint);
+  const waypointEditComponent = new WaypointEditorView(waypoint);
+
+  const replaceCardToForm = () => {
+    waypointsListElement.replaceChild(waypointEditComponent.getElement(), waypointComponent.getElement());
+  };
+
+  const replaceFormToCard = () => {
+    waypointsListElement.replaceChild(waypointComponent.getElement(), waypointEditComponent.getElement());
+  };
+
+  waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceCardToForm();
+  });
+
+  waypointEditComponent.getElement().addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
+
+  render(waypointsListElement, waypointComponent.getElement(), RenderPosition.AFTERBEGIN);
+};
+
 waypoints.forEach((waypoint) => {
-  render(waypointsList.getElement(), new TripWaypointView(waypoint).getElement(), RenderPosition.AFTERBEGIN);
+  renderWaypoint(waypointsList.getElement(), waypoint);
 });
