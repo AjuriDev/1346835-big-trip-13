@@ -1,3 +1,4 @@
+import {createElement} from '../util.js';
 import {humanizeDate} from '../util.js';
 import {createWaypointOffersTemplate} from './waypoint-offers.js';
 import {createScheduleTemplate} from './schedule.js';
@@ -20,11 +21,11 @@ const createWaypointTemplate = (waypoint) => {
   const favoriteClassName = isFavorites
     ? `event__favorite-btn event__favorite-btn--active`
     : `event__favorite-btn`;
-  const offersList = createWaypointOffersTemplate(offers);
+  const offersList = createWaypointOffersTemplate(type, offers);
   const shedule = createScheduleTemplate(startDate, closeDate);
 
-  return (`
-    <div class="event">
+  return (
+    `<div class="event">
       <time class="event__date" datetime="${dateAtribute}">${date}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
@@ -47,8 +48,29 @@ const createWaypointTemplate = (waypoint) => {
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
-    </div>
-  `);
+    </div>`
+  );
 };
 
-export {createWaypointTemplate};
+export default class TripWaypoint {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  _getTemplate() {
+    return createWaypointTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this._getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

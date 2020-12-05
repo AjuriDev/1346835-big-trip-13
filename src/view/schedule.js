@@ -31,16 +31,16 @@ const createScheduleTemplate = (startDate, closeDate) => {
   const closeTime = humanizeDate(closeDate, `HH:mm`);
   const duration = calculateDuration(startDate, closeDate);
 
-  return (`
-    <div class="event__schedule">
+  return (
+    `<div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="${startTimeAtribute}">${startTime}</time>
         &mdash;
         <time class="event__end-time" datetime="${closeTimeAtribute}">${closeTime}</time>
       </p>
       <p class="event__duration">${duration}</p>
-    </div>
-  `);
+    </div>`
+  );
 };
 
 export {createScheduleTemplate};

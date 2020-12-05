@@ -1,16 +1,16 @@
 import {createElement} from '../util.js';
 
-const createInfoBlockTemplate = () => {
-  return `<section class="trip-main__trip-info  trip-info"></section>`;
+const createNewWaypointBtnTemplate = () => {
+  return `<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>`;
 };
 
-export default class InfoBlock {
+export default class NewWaypointBtn {
   constructor() {
     this._element = null;
   }
 
   _getTemplate() {
-    return createInfoBlockTemplate();
+    return createNewWaypointBtnTemplate();
   }
 
   getElement() {

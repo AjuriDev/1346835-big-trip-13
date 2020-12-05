@@ -1,14 +1,15 @@
+import {createElement} from '../util.js';
 import {humanizeDate} from '../util.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
 import {createOffersSectionTemplate} from './waypoint-offers.js';
 import {createDestinationSectionTemplate} from './waypoint-destination.js';
-import {defaultType} from '../const.js';
+import {DEFAULT_TYPE} from '../const.js';
 
 const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}}) => {
 
   const {
-    type = defaultType,
+    type = DEFAULT_TYPE,
     destination = ``,
     offers = [],
     date: {start: startDate, close: closeDate},
@@ -21,8 +22,8 @@ const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}})
   const offersSection = createOffersSectionTemplate(type, offers);
   const destinationSection = createDestinationSectionTemplate(destination);
 
-  return (`
-    <form class="event event--edit" action="#" method="post">
+  return (
+    `<form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -71,8 +72,29 @@ const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}})
 
         ${destinationSection}
       </section>
-    </form>
-  `);
+    </form>`
+  );
 };
 
-export {createWaypointEditorTemplate};
+export default class WaypointEditor {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  _getTemplate() {
+    return createWaypointEditorTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this._getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
