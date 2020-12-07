@@ -25,6 +25,7 @@ module.exports = {
     './src/mock/offers.js',
     './src/mock/destination.js',
     './src/view/waypoint-offers.js',
+    './src/view/new-waypoint-message.js',
     './src/main.js',
   ],
   output: {

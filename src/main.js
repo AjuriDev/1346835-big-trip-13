@@ -12,6 +12,7 @@ import TripSortView from './view/trip-sort.js';
 import WaypointsListView from './view/waypoints-list.js';
 import WaypointEditorView from './view/waypoint-edit.js';
 import TripWaypointView from './view/trip-waypoint.js';
+import NewWaypointMessage from './view/new-waypoint-message.js';
 import {generateWaypoint} from './mock/waypoint.js';
 import {render, RenderPosition} from './util.js';
 
@@ -39,30 +40,8 @@ render(tripMainElement, tripControls.getElement());
 render(tripControls.getElement(), new TripFiltersView().getElement());
 render(tripControls.getElement(), new TripTabsView().getElement());
 
-// добавляем блок "Маршрут и стоимость"
-
-const infoBlock = new InfoBlockView();
-render(tripMainElement, infoBlock.getElement());
-render(infoBlock.getElement(), new InfoCostView(waypoints).getElement());
-
-const infoMain = new InfoMainView();
-render(infoBlock.getElement(), infoMain.getElement());
-render(infoMain.getElement(), new InfoDateView(waypoints).getElement());
-render(infoMain.getElement(), new InfoTitleView(waypoints).getElement());
-
-// создаем список точек маршрута
-
 const siteMainElement = document.querySelector(`.page-main`);
 const tripWaypointsElement = siteMainElement.querySelector(`.trip-events`);
-
-const waypointsList = new WaypointsListView();
-render(tripWaypointsElement, waypointsList.getElement());
-
-// добавляем блок "Сортировка"
-
-render(tripWaypointsElement, new TripSortView().getElement());
-
-// добавляем блоки "Точка маршрута"
 
 const renderWaypoint = (waypointsListElement, waypoint) => {
   const waypointComponent = new TripWaypointView(waypoint);
@@ -76,18 +55,58 @@ const renderWaypoint = (waypointsListElement, waypoint) => {
     waypointsListElement.replaceChild(waypointComponent.getElement(), waypointEditComponent.getElement());
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
   waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
     replaceCardToForm();
+    document.addEventListener(`keydown`, onEscKeyDown);
   });
 
   waypointEditComponent.getElement().addEventListener(`submit`, (evt) => {
     evt.preventDefault();
+    replaceFormToCard();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
     replaceFormToCard();
   });
 
   render(waypointsListElement, waypointComponent.getElement(), RenderPosition.AFTERBEGIN);
 };
 
-waypoints.forEach((waypoint) => {
-  renderWaypoint(waypointsList.getElement(), waypoint);
-});
+const renderWaypointsList = () => {
+  // добавляем блок "Маршрут и стоимость"
+  const infoBlock = new InfoBlockView();
+  render(tripMainElement, infoBlock.getElement());
+  render(infoBlock.getElement(), new InfoCostView(waypoints).getElement());
+
+  const infoMain = new InfoMainView();
+  render(infoBlock.getElement(), infoMain.getElement());
+  render(infoMain.getElement(), new InfoDateView(waypoints).getElement());
+  render(infoMain.getElement(), new InfoTitleView(waypoints).getElement());
+
+  // создаем список точек маршрута
+  const waypointsList = new WaypointsListView();
+  render(tripWaypointsElement, waypointsList.getElement());
+
+  // добавляем блок "Сортировка"
+  render(tripWaypointsElement, new TripSortView().getElement());
+
+  // добавляем блоки "Точка маршрута"
+  waypoints.forEach((waypoint) => {
+    renderWaypoint(waypointsList.getElement(), waypoint);
+  });
+};
+
+if (waypoints.length > 0) {
+  renderWaypointsList();
+} else {
+  render(tripWaypointsElement, new NewWaypointMessage().getElement());
+}
