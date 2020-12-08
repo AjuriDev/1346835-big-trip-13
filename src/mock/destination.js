@@ -1,4 +1,4 @@
-import {getRandomValue, getPartialArray} from '../util.js';
+import {getRandomValue, getPartialArray} from '../util/common.js';
 
 const SENTENCES_MIN = 1;
 const SENTENCES_MAX = 5;

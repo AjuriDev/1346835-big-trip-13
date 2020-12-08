@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {humanizeDate} from '../util.js';
+import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
 import {createOffersSectionTemplate} from './waypoint-offers.js';
@@ -81,9 +81,31 @@ export default class WaypointEditor extends AbstractView {
     super();
     this._waypoint = waypoint;
     this._element = null;
+    this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
+    this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
   }
 
   _getTemplate() {
     return createWaypointEditorTemplate(this._waypoint);
+  }
+
+  _onEditFormSubmit(evt) {
+    evt.preventDefault();
+    this._callback.submit();
+  }
+
+  setOnEditFormSubmit(callback) {
+    this._callback.submit = callback;
+    this.getElement().addEventListener(`submit`, this._onEditFormSubmit);
+  }
+
+  _onRollupBtnClick(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setOnRollupBtnClick(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRollupBtnClick);
   }
 }

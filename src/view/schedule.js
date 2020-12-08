@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {humanizeDate} from '../util.js';
+import {humanizeDate} from '../util/waypoint.js';
 
 const calculateDuration = (startTime, closeTime) => {
   const start = dayjs(startTime);
