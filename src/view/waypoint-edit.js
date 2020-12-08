@@ -1,4 +1,4 @@
-import {createElement} from '../util.js';
+import AbstractView from "./abstract.js";
 import {humanizeDate} from '../util.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
@@ -76,25 +76,14 @@ const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}})
   );
 };
 
-export default class WaypointEditor {
+export default class WaypointEditor extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
     this._element = null;
   }
 
   _getTemplate() {
     return createWaypointEditorTemplate(this._waypoint);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

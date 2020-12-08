@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../util.js';
+import AbstractView from "./abstract.js";
 
 const MONTH_LETTERS_NUMBER = 3;
 const MONTH_DROP_LETTERS_NUMBER = 4;
@@ -16,25 +16,14 @@ const createInfoDateTemplate = (waypoints) => {
   return `<p class="trip-info__dates">${startDate}&nbsp;&mdash;&nbsp;${tripDuration}</p>`;
 };
 
-export default class InfoDate {
+export default class InfoDate extends AbstractView {
   constructor(waypoints) {
+    super();
     this._waypoints = waypoints;
     this._element = null;
   }
 
   _getTemplate() {
     return createInfoDateTemplate(this._waypoints);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

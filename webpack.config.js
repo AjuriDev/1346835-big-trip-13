@@ -4,6 +4,7 @@ module.exports = {
   entry: [
     './src/util.js',
     './src/const.js',
+    './src/view/abstract.js',
     './src/view/trip-info.js',
     './src/view/info-main.js',
     './src/view/info-cost.js',

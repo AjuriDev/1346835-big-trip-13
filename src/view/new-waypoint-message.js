@@ -1,27 +1,16 @@
-import {createElement} from '../util.js';
+import AbstractView from "./abstract.js";
 
 const createMessageTemplate = () => {
   return `<p class="trip-events__msg">Click New Event to create your first point</p>`;
 };
 
-export default class NewWaypointMessage {
+export default class NewWaypointMessage extends AbstractView {
   constructor() {
+    super();
     this._element = null;
   }
 
   _getTemplate() {
     return createMessageTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
