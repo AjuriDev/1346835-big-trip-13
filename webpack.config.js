@@ -2,8 +2,11 @@ const path = require('path');
 
 module.exports = {
   entry: [
-    './src/util.js',
+    './src/util/common.js',
+    './src/util/render.js',
+    './src/util/waypoint.js',
     './src/const.js',
+    './src/view/abstract.js',
     './src/view/trip-info.js',
     './src/view/info-main.js',
     './src/view/info-cost.js',

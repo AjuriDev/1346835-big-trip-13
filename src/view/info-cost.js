@@ -1,4 +1,4 @@
-import {createElement} from '../util.js';
+import AbstractView from "./abstract.js";
 import {getOffers} from '../mock/offers.js';
 
 const getTripCost = (waypoints) => {
@@ -25,25 +25,14 @@ const createInfoCostTemplate = (waypoints) => {
   );
 };
 
-export default class InfoCost {
+export default class InfoCost extends AbstractView {
   constructor(waypoints) {
+    super();
     this._waypoints = waypoints;
     this._element = null;
   }
 
   _getTemplate() {
     return createInfoCostTemplate(this._waypoints);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

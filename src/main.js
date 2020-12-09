@@ -14,7 +14,7 @@ import WaypointEditorView from './view/waypoint-edit.js';
 import TripWaypointView from './view/trip-waypoint.js';
 import NewWaypointMessage from './view/new-waypoint-message.js';
 import {generateWaypoint} from './mock/waypoint.js';
-import {render, RenderPosition} from './util.js';
+import {render, replace, RenderPosition} from './util/render.js';
 
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)
@@ -31,14 +31,14 @@ const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 
 // добавляем кнопку "Новая точка маршрута"
 
-render(tripMainElement, new NewWaypointBtn().getElement());
+render(tripMainElement, new NewWaypointBtn());
 
 // добавляем блоки "Меню" и "Фильтры"
 
 const tripControls = new TripControlsView();
-render(tripMainElement, tripControls.getElement());
-render(tripControls.getElement(), new TripFiltersView().getElement());
-render(tripControls.getElement(), new TripTabsView().getElement());
+render(tripMainElement, tripControls);
+render(tripControls, new TripFiltersView());
+render(tripControls, new TripTabsView());
 
 const siteMainElement = document.querySelector(`.page-main`);
 const tripWaypointsElement = siteMainElement.querySelector(`.trip-events`);
@@ -48,11 +48,11 @@ const renderWaypoint = (waypointsListElement, waypoint) => {
   const waypointEditComponent = new WaypointEditorView(waypoint);
 
   const replaceCardToForm = () => {
-    waypointsListElement.replaceChild(waypointEditComponent.getElement(), waypointComponent.getElement());
+    replace(waypointEditComponent, waypointComponent);
   };
 
   const replaceFormToCard = () => {
-    waypointsListElement.replaceChild(waypointComponent.getElement(), waypointEditComponent.getElement());
+    replace(waypointComponent, waypointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -63,50 +63,50 @@ const renderWaypoint = (waypointsListElement, waypoint) => {
     }
   };
 
-  waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  waypointComponent.setOnRollupBtnClick(() => {
     replaceCardToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  waypointEditComponent.getElement().addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
+  waypointEditComponent.setOnEditFormSubmit(() => {
     replaceFormToCard();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  waypointEditComponent.setOnRollupBtnClick(() => {
     replaceFormToCard();
+    document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(waypointsListElement, waypointComponent.getElement(), RenderPosition.AFTERBEGIN);
+  render(waypointsListElement, waypointComponent, RenderPosition.AFTERBEGIN);
 };
 
 const renderWaypointsList = () => {
   // добавляем блок "Маршрут и стоимость"
   const infoBlock = new InfoBlockView();
-  render(tripMainElement, infoBlock.getElement());
-  render(infoBlock.getElement(), new InfoCostView(waypoints).getElement());
+  render(tripMainElement, infoBlock);
+  render(infoBlock, new InfoCostView(waypoints));
 
   const infoMain = new InfoMainView();
-  render(infoBlock.getElement(), infoMain.getElement());
-  render(infoMain.getElement(), new InfoDateView(waypoints).getElement());
-  render(infoMain.getElement(), new InfoTitleView(waypoints).getElement());
+  render(infoBlock, infoMain);
+  render(infoMain, new InfoDateView(waypoints));
+  render(infoMain, new InfoTitleView(waypoints));
 
   // создаем список точек маршрута
   const waypointsList = new WaypointsListView();
-  render(tripWaypointsElement, waypointsList.getElement());
+  render(tripWaypointsElement, waypointsList);
 
   // добавляем блок "Сортировка"
-  render(tripWaypointsElement, new TripSortView().getElement());
+  render(tripWaypointsElement, new TripSortView());
 
   // добавляем блоки "Точка маршрута"
   waypoints.forEach((waypoint) => {
-    renderWaypoint(waypointsList.getElement(), waypoint);
+    renderWaypoint(waypointsList, waypoint);
   });
 };
 
 if (waypoints.length > 0) {
   renderWaypointsList();
 } else {
-  render(tripWaypointsElement, new NewWaypointMessage().getElement());
+  render(tripWaypointsElement, new NewWaypointMessage());
 }

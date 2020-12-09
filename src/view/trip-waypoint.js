@@ -1,5 +1,5 @@
-import {createElement} from '../util.js';
-import {humanizeDate} from '../util.js';
+import AbstractView from "./abstract.js";
+import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointOffersTemplate} from './waypoint-offers.js';
 import {createScheduleTemplate} from './schedule.js';
 
@@ -52,25 +52,25 @@ const createWaypointTemplate = (waypoint) => {
   );
 };
 
-export default class TripWaypoint {
+export default class TripWaypoint extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
     this._element = null;
+    this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
   }
 
   _getTemplate() {
     return createWaypointTemplate(this._waypoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
+  _onRollupBtnClick(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setOnRollupBtnClick(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRollupBtnClick);
   }
 }

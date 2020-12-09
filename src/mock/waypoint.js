@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomValue, getRandomElement, getPartialArray} from '../util.js';
+import {getRandomValue, getRandomElement, getPartialArray} from '../util/common.js';
 import {DESTINATION_NAMES} from '../const.js';
 import {generateOffersNames} from './offers.js';
 import {TYPES} from '../const.js';

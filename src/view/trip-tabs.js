@@ -1,4 +1,4 @@
-import {createElement} from '../util.js';
+import AbstractView from "./abstract.js";
 
 const createTabsSwitcherTemplate = () => {
   return (
@@ -9,24 +9,13 @@ const createTabsSwitcherTemplate = () => {
   );
 };
 
-export default class TripTabs {
+export default class TripTabs extends AbstractView {
   constructor() {
+    super();
     this._element = null;
   }
 
   _getTemplate() {
     return createTabsSwitcherTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
