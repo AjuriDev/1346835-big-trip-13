@@ -7,6 +7,7 @@ module.exports = {
     './src/util/waypoint.js',
     './src/const.js',
     './src/view/abstract.js',
+    './src/view/trip.js',
     './src/view/trip-info.js',
     './src/view/info-main.js',
     './src/view/info-cost.js',
@@ -29,6 +30,8 @@ module.exports = {
     './src/mock/destination.js',
     './src/view/waypoint-offers.js',
     './src/view/new-waypoint-message.js',
+    './src/presenter/trip.js',
+    './src/presenter/waypoint.js',
     './src/main.js',
   ],
   output: {
