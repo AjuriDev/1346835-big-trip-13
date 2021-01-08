@@ -91,7 +91,7 @@ export default class WaypointEditor extends AbstractView {
 
   _onEditFormSubmit(evt) {
     evt.preventDefault();
-    this._callback.submit();
+    this._callback.submit(this._waypoint);
   }
 
   setOnEditFormSubmit(callback) {
