@@ -10,7 +10,7 @@ import TripControlsView from './view/trip-controls.js';
 import NewWaypointBtn from './view/new-waypoint-btn.js';
 import {generateWaypoint} from './mock/waypoint.js';
 import TripPresenter from "./presenter/trip.js";
-import {render, RenderPosition} from './util/render.js';
+import {render} from './util/render.js';
 
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)

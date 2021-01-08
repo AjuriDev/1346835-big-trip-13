@@ -17,6 +17,7 @@ export default class Trip {
     this._newWaypointMessageComponent = new NewWaypointMessage();
 
     this._handleWaypointChange = this._handleWaypointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(waypoints) {
@@ -32,22 +33,28 @@ export default class Trip {
     this._waypointPresenter[updatedWaypoint.id].init(updatedWaypoint);
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._waypointPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _renderSort() {
     render(this._tripComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderWaypoint(waypoint) {
-    const waypointPresenter = new WaypointPresenter(this._waypointListComponent, this._handleWaypointChange);
+    const waypointPresenter = new WaypointPresenter(this._waypointListComponent, this._handleWaypointChange, this._handleModeChange);
     waypointPresenter.init(waypoint);
     this._waypointPresenter[waypoint.id] = waypointPresenter;
   }
 
   _clearWaypointsList() {
-   Object
-     .values(this._waypointPresenter)
-     .forEach((presenter) => presenter.destroy());
-   this._waypointPresenter = {};
- }
+    Object
+      .values(this._waypointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._waypointPresenter = {};
+  }
 
   _renderWaypointsList() {
     render(this._tripComponent, this._waypointListComponent, RenderPosition.AFTERBEGIN);

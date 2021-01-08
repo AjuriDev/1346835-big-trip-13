@@ -2,13 +2,20 @@ import WaypointEditorView from '../view/waypoint-edit.js';
 import TripWaypointView from '../view/trip-waypoint.js';
 import {render, replace, remove, RenderPosition} from '../util/render.js';
 
+const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`
+};
+
 export default class Waypoint {
-  constructor(waypointsListContainer, changeData) {
+  constructor(waypointsListContainer, changeData, changeMode) {
     this._waypointsListContainer = waypointsListContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._waypointComponent = null;
     this._waypointEditComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._onWaypointRollupBtnClick = this._onWaypointRollupBtnClick.bind(this);
     this._onEditFormRollupBtnClick = this._onEditFormRollupBtnClick.bind(this);
@@ -36,11 +43,11 @@ export default class Waypoint {
       return;
     }
 
-    if (this._waypointsListContainer.getElement().contains(prevWaypointComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._waypointComponent, prevWaypointComponent);
     }
 
-    if (this._waypointsListContainer.getElement().contains(prevWaypointEditComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._waypointEditComponent, prevWaypointEditComponent);
     }
 
@@ -53,14 +60,23 @@ export default class Waypoint {
     remove(this._waypointEditComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
+  }
+
   _replaceCardToForm() {
     replace(this._waypointEditComponent, this._waypointComponent);
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._waypointComponent, this._waypointEditComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
@@ -76,13 +92,13 @@ export default class Waypoint {
 
   _onFavoriteBtnClick() {
     this._changeData(
-      Object.assign(
-        {},
-        this._waypoint,
-        {
-          isFavorites: !this._waypoint.isFavorites
-        }
-      )
+        Object.assign(
+            {},
+            this._waypoint,
+            {
+              isFavorites: !this._waypoint.isFavorites
+            }
+        )
     );
   }
 

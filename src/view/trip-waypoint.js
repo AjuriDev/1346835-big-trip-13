@@ -72,9 +72,9 @@ export default class TripWaypoint extends AbstractView {
   }
 
   _onFavoriteBtnClick(evt) {
-      evt.preventDefault();
-      this._callback.favoriteClick();
-    }
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
 
   setOnRollupBtnClick(callback) {
     this._callback.rollupClick = callback;
