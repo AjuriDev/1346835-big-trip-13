@@ -17,11 +17,11 @@ export default class Waypoint {
     this._waypointEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._onWaypointRollupBtnClick = this._onWaypointRollupBtnClick.bind(this);
-    this._onEditFormRollupBtnClick = this._onEditFormRollupBtnClick.bind(this);
-    this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    this._onFavoriteBtnClick = this._onFavoriteBtnClick.bind(this);
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleEditFormCancel = this._handleEditFormCancel.bind(this);
+    this._handleEditFormSubmit = this._handleEditFormSubmit.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   init(waypoint) {
@@ -33,10 +33,10 @@ export default class Waypoint {
     this._waypointComponent = new TripWaypointView(waypoint);
     this._waypointEditComponent = new WaypointEditorView(waypoint);
 
-    this._waypointComponent.setOnRollupBtnClick(this._onWaypointRollupBtnClick);
-    this._waypointComponent.setOnFavoriteBtnClick(this._onFavoriteBtnClick);
-    this._waypointEditComponent.setOnEditFormSubmit(this._onEditFormSubmit);
-    this._waypointEditComponent.setOnRollupBtnClick(this._onEditFormRollupBtnClick);
+    this._waypointComponent.setOnRollupBtnClick(this._handleEditClick);
+    this._waypointComponent.setOnFavoriteBtnClick(this._handleFavoriteClick);
+    this._waypointEditComponent.setOnEditFormSubmit(this._handleEditFormSubmit);
+    this._waypointEditComponent.setOnRollupBtnClick(this._handleEditFormCancel);
 
     if (prevWaypointComponent === null || prevWaypointEditComponent === null) {
       render(this._waypointsListContainer, this._waypointComponent, RenderPosition.AFTERBEGIN);
@@ -68,29 +68,29 @@ export default class Waypoint {
 
   _replaceCardToForm() {
     replace(this._waypointEditComponent, this._waypointComponent);
-    document.addEventListener(`keydown`, this._onEscKeyDown);
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._waypointComponent, this._waypointEditComponent);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._handleEscKeyDown);
     this._mode = Mode.DEFAULT;
   }
 
-  _onEscKeyDown(evt) {
+  _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._replaceFormToCard();
     }
   }
 
-  _onWaypointRollupBtnClick() {
+  _handleEditClick() {
     this._replaceCardToForm();
   }
 
-  _onFavoriteBtnClick() {
+  _handleFavoriteClick() {
     this._changeData(
         Object.assign(
             {},
@@ -102,11 +102,11 @@ export default class Waypoint {
     );
   }
 
-  _onEditFormRollupBtnClick() {
+  _handleEditFormCancel() {
     this._replaceFormToCard();
   }
 
-  _onEditFormSubmit(waypoint) {
+  _handleEditFormSubmit(waypoint) {
     this._changeData(waypoint);
     this._replaceFormToCard();
   }
