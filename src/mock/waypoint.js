@@ -19,10 +19,13 @@ const generateDate = () => {
   };
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateWaypoint = () => {
   const type = getRandomElement(TYPES);
   const offers = getPartialArray(generateOffersNames(type));
   return {
+    id: generateId(),
     type,
     destination: getRandomElement(DESTINATION_NAMES),
     offers,
