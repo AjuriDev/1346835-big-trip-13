@@ -36,9 +36,25 @@ export default class TripSort extends AbstractView {
   constructor() {
     super();
     this._element = null;
+
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
   }
 
   _getTemplate() {
     return createSortTemplate();
+  }
+
+  _onSortTypeChange(evt) {
+    if (evt.target.tagName !== `LABEL`) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
+  }
+
+  setOnSortTypeChange(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }
