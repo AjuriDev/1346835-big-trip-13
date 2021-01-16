@@ -1,28 +1,4 @@
-import dayjs from 'dayjs';
-import {humanizeDate} from '../util/waypoint.js';
-
-const calculateDuration = (startTime, closeTime) => {
-  const start = dayjs(startTime);
-  const end = dayjs(closeTime);
-  const days = end.diff(start, `day`) % 30 < 10
-    ? `0${end.diff(start, `day`) % 30}`
-    : end.diff(start, `day`) % 30;
-  const hours = end.diff(start, `hour`) % 24 < 10
-    ? `0${end.diff(start, `hour`) % 24}`
-    : end.diff(start, `hour`) % 24;
-  const minutes = end.diff(start, `minute`) % 60 < 10
-    ? `0${end.diff(start, `minute`) % 60}`
-    : end.diff(start, `minute`) % 60;
-
-  if (Number(days)) {
-    return `${days}D ${hours}H ${minutes}M`;
-  } else if (Number(hours)) {
-    return `${hours}H ${minutes}M`;
-  } else if (Number(minutes)) {
-    return `${minutes}M`;
-  }
-  return ``;
-};
+import {humanizeDate, calculateDuration} from '../util/waypoint.js';
 
 const createScheduleTemplate = (startDate, closeDate) => {
   const startTimeAtribute = humanizeDate(startDate, `YYYY-MM-DDTHH:mm`);

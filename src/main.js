@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import InfoBlockView from './view/trip-info.js';
 import InfoMainView from './view/info-main.js';
 import InfoTitleView from './view/info-title.js';
@@ -15,12 +14,7 @@ import {render} from './util/render.js';
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)
   .fill()
-  .map(generateWaypoint)
-  .sort(({date: {start: startA}}, {date: {start: startB}}) => {
-    startA = dayjs(startA);
-    startB = dayjs(startB);
-    return startA.diff(startB);
-  });
+  .map(generateWaypoint);
 
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
