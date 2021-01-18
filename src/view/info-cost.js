@@ -1,14 +1,12 @@
 import AbstractView from "./abstract.js";
-import {getOffers} from '../mock/offers.js';
 
 const getTripCost = (waypoints) => {
   let cost = 0;
 
   waypoints.forEach((waypoint) => {
     cost += waypoint.price;
-    const offers = getOffers(waypoint.type);
-    offers.forEach((offer) => {
-      cost += waypoint.offers.includes(offer.name) ? offer.price : 0;
+    waypoint.offers.forEach((offer) => {
+      cost += offer.price;
     });
   });
 
