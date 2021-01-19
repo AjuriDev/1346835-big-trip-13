@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {getRandomValue, getRandomElement, getPartialArray} from '../util/common.js';
-import {DESTINATION_NAMES} from '../const.js';
-import {generateOffersNames} from './offers.js';
+import {DESTINATIONS} from '../const.js';
+import {getOffers} from './offers.js';
 import {TYPES} from '../const.js';
 
 const WAYPOINT_PRICE_MIN = 10;
@@ -23,11 +23,11 @@ const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateWaypoint = () => {
   const type = getRandomElement(TYPES);
-  const offers = getPartialArray(generateOffersNames(type));
+  const offers = getPartialArray(getOffers(type));
   return {
     id: generateId(),
     type,
-    destination: getRandomElement(DESTINATION_NAMES),
+    destination: getRandomElement(DESTINATIONS),
     offers,
     date: generateDate(),
     price: getRandomValue(WAYPOINT_PRICE_MAX, WAYPOINT_PRICE_MIN),

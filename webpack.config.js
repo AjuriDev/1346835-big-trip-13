@@ -21,6 +21,7 @@ module.exports = {
     './src/view/type-list.js',
     './src/view/waypoints-list.js',
     './src/view/destination-options.js',
+    './src/view/destination-photos.js',
     './src/view/waypoint-destination.js',
     './src/view/waypoint-edit.js',
     './src/view/schedule.js',

@@ -2,55 +2,60 @@ const OFFERS = {
   'Flight': [
     {
       id: `luggage`,
-      name: `Add luggage`,
+      title: `Add luggage`,
       price: 30
     },
     {
       id: `comfort`,
-      name: `Switch to comfort`,
+      title: `Switch to comfort`,
       price: 80
     },
     {
       id: `meal`,
-      name: `Add meal`,
+      title: `Add meal`,
       price: 15
     },
     {
       id: `seats`,
-      name: `Choose seats`,
+      title: `Choose seats`,
       price: 5
     },
     {
       id: `train`,
-      name: `Travel by train`,
+      title: `Travel by train`,
       price: 40
     },
   ],
   'Taxi': [
     {
-      name: `Order Uber`,
+      id: `uber`,
+      title: `Order Uber`,
       price: 20
     }
   ],
   'Drive': [
     {
-      name: `Rent a car`,
+      id: `car`,
+      title: `Rent a car`,
       price: 200
     }
   ],
   'Check-in': [
     {
-      name: `Add breakfast`,
+      id: `breakfast`,
+      title: `Add breakfast`,
       price: 50
     }
   ],
   'Sightseeing': [
     {
-      name: `Book tickets`,
+      id: `tickets`,
+      title: `Book tickets`,
       price: 40
     },
     {
-      name: `Lunch in city`,
+      id: `lunch`,
+      title: `Lunch in city`,
       price: 30
     }
   ]

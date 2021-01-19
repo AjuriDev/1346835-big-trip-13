@@ -1,25 +1,30 @@
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
 import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
 import {createOffersSectionTemplate} from './waypoint-offers.js';
 import {createDestinationSectionTemplate} from './waypoint-destination.js';
-import {DEFAULT_TYPE} from '../const.js';
+import {getOffers} from '../mock/offers.js';
+import {getDestination} from '../mock/destination.js';
+import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
 
-const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}}) => {
+const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => {
+
+  const TIME_FORMAT = `DD/MM/YY HH:mm`;
 
   const {
     type = DEFAULT_TYPE,
-    destination = ``,
+    destination = null,
     offers = [],
     date: {start: startDate, close: closeDate},
-    price = ``
-  } = waypoint;
+    price = ``,
+    isOffers,
+  } = data;
   const typeList = createWaypointTypeListTemplate(type);
   const optionList = createDestinationOptionsTemplate();
-  const startTime = humanizeDate(startDate, `DD/MM/YY HH:mm`);
-  const closeTime = humanizeDate(closeDate, `DD/MM/YY HH:mm`);
-  const offersSection = createOffersSectionTemplate(type, offers);
+  const startTime = humanizeDate(startDate, TIME_FORMAT);
+  const closeTime = humanizeDate(closeDate, TIME_FORMAT);
+  const offersSection = isOffers ? createOffersSectionTemplate(type, offers) : ``;
   const destinationSection = createDestinationSectionTemplate(destination);
 
   return (
@@ -38,7 +43,7 @@ const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}})
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
           <datalist id="destination-list-1">
             ${optionList}
           </datalist>
@@ -76,22 +81,60 @@ const createWaypointEditorTemplate = (waypoint = {date: {start: ``, close: ``}})
   );
 };
 
-export default class WaypointEditor extends AbstractView {
+export default class WaypointEditor extends SmartView {
   constructor(waypoint) {
     super();
-    this._waypoint = waypoint;
+    this._data = this._parseWaypointToData(waypoint);
     this._element = null;
+
     this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
     this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
+    this._onTypeChange = this._onTypeChange.bind(this);
+    this._onDestinationChange = this._onDestinationChange.bind(this);
+    this._onPriceChange = this._onPriceChange.bind(this);
+    this._onStartTimeChange = this._onStartTimeChange.bind(this);
+    this._onEndTimeChange = this._onEndTimeChange.bind(this);
+
+    this._setInnerHandlers();
+  }
+
+  reset(waypoint) {
+    this.updateData(
+        this._parseWaypointToData(waypoint)
+    );
   }
 
   _getTemplate() {
-    return createWaypointEditorTemplate(this._waypoint);
+    return createWaypointEditorTemplate(this._data);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setOnEditFormSubmit(this._callback.submit);
+    this.setOnRollupBtnClick(this._callback.click);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._onPriceChange);
+    this.getElement()
+      .querySelector(`.event__type-list`)
+      .addEventListener(`click`, this._onTypeChange);
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`focusout`, this._onDestinationChange);
+    this.getElement()
+      .querySelector(`input[name="event-start-time"]`)
+      .addEventListener(`input`, this._onStartTimeChange);
+    this.getElement()
+      .querySelector(`input[name="event-end-time"]`)
+      .addEventListener(`input`, this._onEndTimeChange);
   }
 
   _onEditFormSubmit(evt) {
     evt.preventDefault();
-    this._callback.submit(this._waypoint);
+    this._callback.submit(this._parseDataToWaypoint(this._data));
   }
 
   setOnEditFormSubmit(callback) {
@@ -107,5 +150,71 @@ export default class WaypointEditor extends AbstractView {
   setOnRollupBtnClick(callback) {
     this._callback.click = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRollupBtnClick);
+  }
+
+  _onTypeChange(evt) {
+    if (evt.target.tagName === `LABEL`) {
+      this.updateData({
+        type: evt.target.dataset.type,
+        offers: [],
+        isOffers: getOffers(evt.target.dataset.type).length > 0,
+      });
+    }
+  }
+
+  _onDestinationChange(evt) {
+    const destination = getDestination(DESTINATIONS, evt.target.value);
+    this.updateData({
+      destination: Object.assign(
+          {},
+          destination,
+          {
+            isDescription: destination.description !== null && destination.description !== ``,
+            isPhoto: destination.pictures !== null && destination.pictures.length > 0
+          }
+      )
+    });
+  }
+
+  _onPriceChange(evt) {
+    this.updateData({
+      price: evt.target.value
+    }, true);
+  }
+
+  _onStartTimeChange() {
+
+  }
+
+  _onEndTimeChange() {
+
+  }
+
+  _parseWaypointToData(waypoint) {
+    return Object.assign(
+        {},
+        waypoint,
+        {
+          isOffers: getOffers(waypoint.type).length > 0,
+          destination: Object.assign(
+              {},
+              waypoint.destination,
+              {
+                isDescription: waypoint.destination.description !== null && waypoint.destination.description !== ``,
+                isPhoto: waypoint.destination.pictures !== null && waypoint.destination.pictures.length > 0
+              }
+          )
+        }
+    );
+  }
+
+  _parseDataToWaypoint(data) {
+    data = Object.assign({}, data);
+
+    delete data.isOffers;
+    delete data.destination.isDescription;
+    delete data.destination.isPhoto;
+
+    return data;
   }
 }
