@@ -40,4 +40,15 @@ const generateDestination = (destination) => {
   };
 };
 
-export {generateDestination};
+const getDestination = (destinations, destination) => {
+  if (!destinations.map((dest) => dest.name).includes(destination)) {
+    return {
+      name: destination,
+      description: ``,
+      pictures: []
+    };
+  }
+  return destinations.find((dest) => dest.name === destination);
+};
+
+export {generateDestination, getDestination};

@@ -16,8 +16,6 @@ const waypoints = Array(WAYPOINTS_NUMBER)
   .fill()
   .map(generateWaypoint);
 
-window.___waypoints___ = waypoints;
-
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 

@@ -28,28 +28,33 @@ const OFFERS = {
   ],
   'Taxi': [
     {
+      id: `uber`,
       title: `Order Uber`,
       price: 20
     }
   ],
   'Drive': [
     {
+      id: `car`,
       title: `Rent a car`,
       price: 200
     }
   ],
   'Check-in': [
     {
+      id: `breakfast`,
       title: `Add breakfast`,
       price: 50
     }
   ],
   'Sightseeing': [
     {
+      id: `tickets`,
       title: `Book tickets`,
       price: 40
     },
     {
+      id: `lunch`,
       title: `Lunch in city`,
       price: 30
     }

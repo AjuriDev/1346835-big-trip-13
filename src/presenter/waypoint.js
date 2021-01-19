@@ -82,6 +82,7 @@ export default class Waypoint {
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._waypointEditComponent.reset(this._waypoint);
       this._replaceFormToCard();
     }
   }
@@ -103,6 +104,7 @@ export default class Waypoint {
   }
 
   _handleEditFormCancel() {
+    this._waypointEditComponent.reset(this._waypoint);
     this._replaceFormToCard();
   }
 

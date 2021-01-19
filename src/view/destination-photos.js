@@ -4,6 +4,7 @@ const createPhotoTemplate = (photo) => {
 
 const createPhotoListTemplate = (photos) => {
   photos = photos.map(createPhotoTemplate).join();
+
   return (
     `<div class="event__photos-tape">
       ${photos}
@@ -12,16 +13,13 @@ const createPhotoListTemplate = (photos) => {
 };
 
 const createDestinationPhotosTemplate = (photos) => {
-  if (photos.length > 0) {
-    const photoList = createPhotoListTemplate(photos);
+  const photoList = createPhotoListTemplate(photos);
 
-    return (
-      `<div class="event__photos-container">
-        ${photoList}
-      </div>`
-    );
-  }
-  return ``;
+  return (
+    `<div class="event__photos-container">
+      ${photoList}
+    </div>`
+  );
 };
 
 export {createDestinationPhotosTemplate};

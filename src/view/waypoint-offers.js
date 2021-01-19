@@ -37,19 +37,15 @@ const createOffersSectionTemplate = (type, waypointOffers) => {
   const offers = getOffers(type);
   const options = offers.map((offer) => createOfferTemplate(offer, offersNames)).join(``);
 
-  if (offers.length > 0) {
-    return (
-      `<section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-        <div class="event__available-offers">
-          ${options}
-        </div>
-      </section>`
-    );
-  }
-
-  return ``;
+      <div class="event__available-offers">
+        ${options}
+      </div>
+    </section>`
+  );
 };
 
 export {createWaypointOffersTemplate, createOffersSectionTemplate};
