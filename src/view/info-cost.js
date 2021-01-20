@@ -5,9 +5,7 @@ const getTripCost = (waypoints) => {
 
   waypoints.forEach((waypoint) => {
     cost += waypoint.price;
-    waypoint.offers.forEach((offer) => {
-      cost += offer.price;
-    });
+    cost += waypoint.offers.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
   });
 
   return cost;
