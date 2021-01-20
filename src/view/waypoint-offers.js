@@ -23,7 +23,7 @@ const createOfferTemplate = (offer, offersNames) => {
   return (
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}"${offersNames.includes(offer.title) ? ` checked` : ``}>
-      <label class="event__offer-label" for="event-offer-${offer.id}-1">
+      <label class="event__offer-label" for="event-offer-${offer.id}-1" data-title="${offer.title}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
@@ -32,7 +32,14 @@ const createOfferTemplate = (offer, offersNames) => {
   );
 };
 
-const createOffersSectionTemplate = (type, waypointOffers) => {
+const createOffersSectionTemplate = (type, waypointOffers, isOffers) => {
+  if (!isOffers) {
+    return (
+      `<section class="event__section  event__section--offers visually-hidden">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      </section>`
+    );
+  }
   const offersNames = waypointOffers.map((offer) => offer.title);
   const offers = getOffers(type);
   const options = offers.map((offer) => createOfferTemplate(offer, offersNames)).join(``);

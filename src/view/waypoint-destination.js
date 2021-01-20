@@ -5,20 +5,24 @@ const createDescriptionTemplate = (description) => {
 };
 
 const createDestinationSectionTemplate = ({description, pictures: photos, isPhoto, isDescription}) => {
-  const photoList = isPhoto ? createDestinationPhotosTemplate(photos) : ``;
-  const text = isDescription ? createDescriptionTemplate(description) : ``;
-
-  if (isDescription || isPhoto) {
+  if (!isDescription && !isPhoto) {
     return (
-      `<section class="event__section  event__section--destination">
+      `<section class="event__section  event__section--destination visually-hidden">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        ${text}
-        ${photoList}
       </section>`
     );
   }
 
-  return ``;
+  const photoList = isPhoto ? createDestinationPhotosTemplate(photos) : ``;
+  const text = isDescription ? createDescriptionTemplate(description) : ``;
+
+  return (
+    `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      ${text}
+      ${photoList}
+    </section>`
+  );
 };
 
 export {createDestinationSectionTemplate};
