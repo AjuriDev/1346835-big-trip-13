@@ -28,7 +28,7 @@ const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => 
   const optionList = createDestinationOptionsTemplate();
   const startTime = humanizeDate(startDate, TIME_FORMAT);
   const closeTime = humanizeDate(closeDate, TIME_FORMAT);
-  const offersSection = isOffers ? createOffersSectionTemplate(type, offers) : ``;
+  const offersSection = createOffersSectionTemplate(type, offers, isOffers);
   const destinationSection = createDestinationSectionTemplate(destination);
 
   return (
@@ -100,6 +100,7 @@ export default class WaypointEditor extends SmartView {
     this._onPriceChange = this._onPriceChange.bind(this);
     this._onStartTimeChange = this._onStartTimeChange.bind(this);
     this._onEndTimeChange = this._onEndTimeChange.bind(this);
+    this._onOffersListChange = this._onOffersListChange.bind(this);
 
     this._setInnerHandlers();
   }
@@ -129,11 +130,11 @@ export default class WaypointEditor extends SmartView {
     this._datepickerStart = flatpickr(
         this.getElement().querySelector(`input[name="event-start-time"]`),
         {
-          enableTime: true,
-          time_24hr: true,
-          dateFormat: `d/m/y H:i`,
-          defaultDate: this._data.date.start,
-          onChange: this._onStartTimeChange
+          'enableTime': true,
+          'time_24hr': true,
+          'dateFormat': `d/m/y H:i`,
+          'defaultDate': this._data.date.start,
+          'onChange': this._onStartTimeChange
         }
     );
   }
@@ -147,11 +148,11 @@ export default class WaypointEditor extends SmartView {
     this._datepickerEnd = flatpickr(
         this.getElement().querySelector(`input[name="event-end-time"]`),
         {
-          enableTime: true,
-          time_24hr: true,
-          dateFormat: `d/m/y H:i`,
-          defaultDate: this._data.date.close,
-          onChange: this._onEndTimeChange
+          'enableTime': true,
+          'time_24hr': true,
+          'dateFormat': `d/m/y H:i`,
+          'defaultDate': this._data.date.close,
+          'onChange': this._onEndTimeChange
         }
     );
   }
@@ -166,6 +167,9 @@ export default class WaypointEditor extends SmartView {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`focusout`, this._onDestinationChange);
+    this.getElement()
+      .querySelector(`.event__section--offers`)
+      .addEventListener(`click`, this._onOffersListChange);
     this._setOnStartTimeDatepicker();
     this._setOnEndTimeDatepicker();
   }
@@ -238,6 +242,31 @@ export default class WaypointEditor extends SmartView {
           {close: dayjs(userDate).toDate()}
       )
     }, true);
+  }
+
+  _onOffersListChange(evt) {
+    const offerSelector = evt.target.closest(`label`);
+
+    if (offerSelector) {
+      this.updateData({
+        offers: this._updateOffers(offerSelector.dataset.title)
+      });
+    }
+  }
+
+  _updateOffers(title) {
+    let offers = this._data.offers.slice();
+    const toggledOffer = offers.findIndex((offer) => offer.title === title);
+
+    if (toggledOffer !== -1) {
+      return [
+        ...offers.slice(0, toggledOffer),
+        ...offers.slice(toggledOffer + 1)
+      ];
+    }
+
+    offers.unshift(getOffers(this._data.type).find((offer) => offer.title === title));
+    return offers;
   }
 
   _parseWaypointToData(waypoint) {
