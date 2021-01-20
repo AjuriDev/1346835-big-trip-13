@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import flatpickr from 'flatpickr';
 import SmartView from "./smart.js";
 import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
@@ -7,6 +9,8 @@ import {createDestinationSectionTemplate} from './waypoint-destination.js';
 import {getOffers} from '../mock/offers.js';
 import {getDestination} from '../mock/destination.js';
 import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => {
 
@@ -86,6 +90,8 @@ export default class WaypointEditor extends SmartView {
     super();
     this._data = this._parseWaypointToData(waypoint);
     this._element = null;
+    this._datepickerStart = null;
+    this._datepickerEnd = null;
 
     this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
     this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
@@ -114,6 +120,42 @@ export default class WaypointEditor extends SmartView {
     this.setOnRollupBtnClick(this._callback.click);
   }
 
+  _setOnStartTimeDatepicker() {
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    this._datepickerStart = flatpickr(
+        this.getElement().querySelector(`input[name="event-start-time"]`),
+        {
+          enableTime: true,
+          time_24hr: true,
+          dateFormat: `d/m/y H:i`,
+          defaultDate: this._data.date.start,
+          onChange: this._onStartTimeChange
+        }
+    );
+  }
+
+  _setOnEndTimeDatepicker() {
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
+
+    this._datepickerEnd = flatpickr(
+        this.getElement().querySelector(`input[name="event-end-time"]`),
+        {
+          enableTime: true,
+          time_24hr: true,
+          dateFormat: `d/m/y H:i`,
+          defaultDate: this._data.date.close,
+          onChange: this._onEndTimeChange
+        }
+    );
+  }
+
   _setInnerHandlers() {
     this.getElement()
       .querySelector(`.event__input--price`)
@@ -124,12 +166,8 @@ export default class WaypointEditor extends SmartView {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`focusout`, this._onDestinationChange);
-    this.getElement()
-      .querySelector(`input[name="event-start-time"]`)
-      .addEventListener(`input`, this._onStartTimeChange);
-    this.getElement()
-      .querySelector(`input[name="event-end-time"]`)
-      .addEventListener(`input`, this._onEndTimeChange);
+    this._setOnStartTimeDatepicker();
+    this._setOnEndTimeDatepicker();
   }
 
   _onEditFormSubmit(evt) {
@@ -182,12 +220,24 @@ export default class WaypointEditor extends SmartView {
     }, true);
   }
 
-  _onStartTimeChange() {
-
+  _onStartTimeChange([userDate]) {
+    this.updateData({
+      date: Object.assign(
+          {},
+          this._data.date,
+          {start: dayjs(userDate).toDate()}
+      )
+    }, true);
   }
 
-  _onEndTimeChange() {
-
+  _onEndTimeChange([userDate]) {
+    this.updateData({
+      date: Object.assign(
+          {},
+          this._data.date,
+          {close: dayjs(userDate).toDate()}
+      )
+    }, true);
   }
 
   _parseWaypointToData(waypoint) {
