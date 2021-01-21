@@ -1,6 +1,7 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
 import TripWaypointView from '../view/trip-waypoint.js';
 import {render, replace, remove, RenderPosition} from '../util/render.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -93,6 +94,8 @@ export default class Waypoint {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_WAYPOINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._waypoint,
@@ -109,7 +112,11 @@ export default class Waypoint {
   }
 
   _handleEditFormSubmit(waypoint) {
-    this._changeData(waypoint);
+    this._changeData(
+        UserAction.UPDATE_WAYPOINT,
+        UpdateType.MINOR,
+        waypoint
+    );
     this._replaceFormToCard();
   }
 }

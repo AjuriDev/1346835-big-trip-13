@@ -4,10 +4,23 @@ const TYPES = [`Check-in`, `Sightseeing`, `Restaurant`, `Taxi`, `Bus`, `Train`, 
 const DEFAULT_TYPE = `Flight`;
 const DESTINATION_NAMES = [`Amsterdam`, `Geneva`, `Chamonix`];
 const DESTINATIONS = DESTINATION_NAMES.map(generateDestination);
+
 const SortType = {
   DEFAULT: `default`,
   TIME_UP: `time-up`,
   PRICE_UP: `price-up`
 };
 
-export {TYPES, DEFAULT_TYPE, DESTINATION_NAMES, DESTINATIONS, SortType};
+const UserAction = {
+  UPDATE_WAYPOINT: `UPDATE_WAYPOINT`,
+  ADD_WAYPOINT: `ADD_WAYPOINT`,
+  DELETE_WAYPOINT: `DELETE_WAYPOINT`
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export {TYPES, DEFAULT_TYPE, DESTINATION_NAMES, DESTINATIONS, SortType, UserAction, UpdateType};

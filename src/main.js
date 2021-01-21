@@ -8,13 +8,17 @@ import TripFiltersView from './view/trip-filters.js';
 import TripControlsView from './view/trip-controls.js';
 import NewWaypointBtn from './view/new-waypoint-btn.js';
 import {generateWaypoint} from './mock/waypoint.js';
-import TripPresenter from "./presenter/trip.js";
+import TripPresenter from './presenter/trip.js';
+import WaypointsModel from './model/waypoints.js';
 import {render} from './util/render.js';
 
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)
   .fill()
   .map(generateWaypoint);
+
+const waypointsModel = new WaypointsModel();
+waypointsModel.setWaypoints(waypoints);
 
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
@@ -44,5 +48,5 @@ render(infoMain, new InfoTitleView(waypoints));
 const siteMainElement = document.querySelector(`.page-main`);
 const tripContainerElement = siteMainElement.querySelector(`.page-body__container`);
 
-const tripPresenter = new TripPresenter(tripContainerElement);
-tripPresenter.init(waypoints);
+const tripPresenter = new TripPresenter(tripContainerElement, waypointsModel);
+tripPresenter.init();
