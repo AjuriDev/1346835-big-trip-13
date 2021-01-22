@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractView from './abstract.js';
 
 const createTripControlsTemplate = () => {
   return `<div class="trip-main__trip-controls  trip-controls"></div>`;

@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
-import SmartView from "./smart.js";
+import SmartView from './smart.js';
 import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
@@ -10,7 +10,7 @@ import {getOffers} from '../mock/offers.js';
 import {getDestination} from '../mock/destination.js';
 import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
 
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => {
 
@@ -93,7 +93,7 @@ export default class WaypointEditor extends SmartView {
     this._datepickerStart = null;
     this._datepickerEnd = null;
 
-    this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
+    this._onRolldownBtnClick = this._onRolldownBtnClick.bind(this);
     this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
     this._onTypeChange = this._onTypeChange.bind(this);
     this._onDestinationChange = this._onDestinationChange.bind(this);
@@ -101,6 +101,7 @@ export default class WaypointEditor extends SmartView {
     this._onStartTimeChange = this._onStartTimeChange.bind(this);
     this._onEndTimeChange = this._onEndTimeChange.bind(this);
     this._onOffersListChange = this._onOffersListChange.bind(this);
+    this._onDeleteBtnClick = this._onDeleteBtnClick.bind(this);
 
     this._setInnerHandlers();
   }
@@ -118,7 +119,8 @@ export default class WaypointEditor extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setOnEditFormSubmit(this._callback.submit);
-    this.setOnRollupBtnClick(this._callback.click);
+    this.setOnRolldownBtnClick(this._callback.rolldownClick);
+    this.setOnDeleteBtnClick(this._callback.deleteClick);
   }
 
   _setOnStartTimeDatepicker() {
@@ -184,14 +186,24 @@ export default class WaypointEditor extends SmartView {
     this.getElement().addEventListener(`submit`, this._onEditFormSubmit);
   }
 
-  _onRollupBtnClick(evt) {
+  _onRolldownBtnClick(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.rolldownClick();
   }
 
-  setOnRollupBtnClick(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRollupBtnClick);
+  setOnRolldownBtnClick(callback) {
+    this._callback.rolldownClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRolldownBtnClick);
+  }
+
+  _onDeleteBtnClick(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._parseDataToWaypoint(this._data));
+  }
+
+  setOnDeleteBtnClick(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._onDeleteBtnClick);
   }
 
   _onTypeChange(evt) {

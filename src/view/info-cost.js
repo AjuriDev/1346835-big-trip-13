@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractView from './abstract.js';
 
 const getTripCost = (waypoints) => {
   let cost = 0;

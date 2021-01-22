@@ -4,12 +4,14 @@ import WaypointsListView from '../view/waypoints-list.js';
 import NewWaypointMessage from '../view/new-waypoint-message.js';
 import WaypointPresenter from './waypoint.js';
 import {sortDateUp, sortTimeUp, sortPriceUp} from '../util/waypoint.js';
+import {filter} from "../util/filter.js";
 import {render, remove, RenderPosition} from '../util/render.js';
 import {SortType, UserAction, UpdateType} from '../const.js';
 
 export default class Trip {
-  constructor(tripContainer, waypointsModel) {
+  constructor(tripContainer, waypointsModel, filterModel) {
     this._waypointsModel = waypointsModel;
+    this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._waypointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
@@ -26,6 +28,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._waypointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -65,13 +68,17 @@ export default class Trip {
   }
 
   _getWaypoints() {
+    const filterType = this._filterModel.getFilter();
+    const waypoints = this._waypointsModel.getWaypoints();
+    const filtredWaypoints = filter[filterType](waypoints);
+
     switch (this._currentSortType) {
       case SortType.DEFAULT:
-        return this._waypointsModel.getWaypoints().slice().sort(sortDateUp);
+        return filtredWaypoints.sort(sortDateUp);
       case SortType.TIME_UP:
-        return this._waypointsModel.getWaypoints().slice().sort(sortTimeUp);
+        return filtredWaypoints.sort(sortTimeUp);
       case SortType.PRICE_UP:
-        return this._waypointsModel.getWaypoints().slice().sort(sortPriceUp);
+        return filtredWaypoints.sort(sortPriceUp);
     }
 
     return this._waypointsModel.getWaypoints();
@@ -111,13 +118,6 @@ export default class Trip {
     this._waypointPresenter[waypoint.id] = waypointPresenter;
   }
 
-  _clearWaypointsList() {
-    Object
-      .values(this._waypointPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._waypointPresenter = {};
-  }
-
   _renderWaypointsList(waypoints) {
     render(this._tripComponent, this._waypointListComponent, RenderPosition.AFTERBEGIN);
 
@@ -127,7 +127,7 @@ export default class Trip {
   }
 
   _renderNewWaypointMessage() {
-    render(this._tripComponent, new NewWaypointMessage());
+    render(this._tripComponent, this._newWaypointMessageComponent);
   }
 
   _clearTrip(resetSortType = false) {

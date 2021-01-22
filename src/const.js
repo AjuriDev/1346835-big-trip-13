@@ -23,4 +23,10 @@ const UpdateType = {
   MAJOR: `MAJOR`
 };
 
-export {TYPES, DEFAULT_TYPE, DESTINATION_NAMES, DESTINATIONS, SortType, UserAction, UpdateType};
+const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
+
+export {TYPES, DEFAULT_TYPE, DESTINATION_NAMES, DESTINATIONS, SortType, UserAction, UpdateType, FilterType};

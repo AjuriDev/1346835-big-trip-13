@@ -44,4 +44,12 @@ const sortPriceUp = ({price: priceA}, {price: priceB}) => {
   return priceB - priceA;
 };
 
-export {humanizeDate, calculateDuration, sortDateUp, sortTimeUp, sortPriceUp};
+const isWaypointFuture = (dateFrom) => {
+  return dayjs().diff(dayjs(dateFrom)) < 0;
+};
+
+const isWaypointPast = (dateTo) => {
+  return dayjs().diff(dayjs(dateTo)) > 0;
+};
+
+export {humanizeDate, calculateDuration, sortDateUp, sortTimeUp, sortPriceUp, isWaypointFuture, isWaypointPast};
