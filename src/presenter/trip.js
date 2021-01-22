@@ -3,10 +3,11 @@ import TripSortView from '../view/trip-sort.js';
 import WaypointsListView from '../view/waypoints-list.js';
 import NewWaypointMessage from '../view/new-waypoint-message.js';
 import WaypointPresenter from './waypoint.js';
+import WaypointNewPresenter from "./new-waypoint.js";
 import {sortDateUp, sortTimeUp, sortPriceUp} from '../util/waypoint.js';
 import {filter} from "../util/filter.js";
 import {render, remove, RenderPosition} from '../util/render.js';
-import {SortType, UserAction, UpdateType} from '../const.js';
+import {SortType, UserAction, UpdateType, FilterType} from '../const.js';
 
 export default class Trip {
   constructor(tripContainer, waypointsModel, filterModel) {
@@ -29,6 +30,8 @@ export default class Trip {
 
     this._waypointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._waypointNewPresenter = new WaypointNewPresenter(this._waypointListComponent, this._handleViewAction);
   }
 
   init() {
@@ -67,6 +70,12 @@ export default class Trip {
     }
   }
 
+  createWaypoint() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._waypointNewPresenter.init();
+  }
+
   _getWaypoints() {
     const filterType = this._filterModel.getFilter();
     const waypoints = this._waypointsModel.getWaypoints();
@@ -85,6 +94,8 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._waypointNewPresenter.destroy();
+
     Object
       .values(this._waypointPresenter)
       .forEach((presenter) => presenter.resetView());
@@ -131,6 +142,8 @@ export default class Trip {
   }
 
   _clearTrip(resetSortType = false) {
+    this._waypointNewPresenter.destroy();
+
     Object
       .values(this._waypointPresenter)
       .forEach((presenter) => presenter.destroy());

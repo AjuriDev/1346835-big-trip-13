@@ -12,16 +12,32 @@ import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => {
+const BLANK_WAYPOINT = {
+  type: DEFAULT_TYPE,
+  destination: {
+    name: ``,
+    description: ``,
+    pictures: []
+  },
+  offers: [],
+  date: {
+    start: ``,
+    close: ``
+  },
+  price: ``,
+  isFavorites: false
+};
+
+const createWaypointEditorTemplate = (data) => {
 
   const TIME_FORMAT = `DD/MM/YY HH:mm`;
 
   const {
-    type = DEFAULT_TYPE,
-    destination = null,
-    offers = [],
+    type,
+    destination,
+    offers,
     date: {start: startDate, close: closeDate},
-    price = ``,
+    price,
     isOffers,
   } = data;
   const typeList = createWaypointTypeListTemplate(type);
@@ -86,7 +102,7 @@ const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => 
 };
 
 export default class WaypointEditor extends SmartView {
-  constructor(waypoint) {
+  constructor(waypoint = BLANK_WAYPOINT) {
     super();
     this._data = this._parseWaypointToData(waypoint);
     this._element = null;
@@ -104,6 +120,20 @@ export default class WaypointEditor extends SmartView {
     this._onDeleteBtnClick = this._onDeleteBtnClick.bind(this);
 
     this._setInnerHandlers();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
   }
 
   reset(waypoint) {

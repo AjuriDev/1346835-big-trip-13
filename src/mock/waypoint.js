@@ -35,4 +35,4 @@ const generateWaypoint = () => {
   };
 };
 
-export {generateWaypoint};
+export {generateWaypoint, generateId};
