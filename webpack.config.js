@@ -6,6 +6,7 @@ module.exports = {
     './src/util/render.js',
     './src/util/waypoint.js',
     './src/util/observer.js',
+    './src/util/destination.js',
     './src/const.js',
     './src/model/waypoints.js',
     './src/model/filter.js',

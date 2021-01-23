@@ -8,7 +8,7 @@ import {createDestinationOptionsTemplate} from './destination-options.js';
 import {createOffersSectionTemplate} from './waypoint-offers.js';
 import {createDestinationSectionTemplate} from './waypoint-destination.js';
 import {getOffers} from '../mock/offers.js';
-import {getDestination} from '../mock/destination.js';
+import {getDestination, isValidDestination} from '../util/destination.js';
 import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -126,6 +126,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
             type="number"
             name="event-price"
             value="${price}"
+            min="0"
             required
           />
         </div>
@@ -215,7 +216,8 @@ export default class WaypointEditor extends SmartView {
           'time_24hr': true,
           'dateFormat': `d/m/y H:i`,
           'defaultDate': this._data.date.start,
-          'onChange': this._onStartTimeChange
+          'onClose': this._onStartTimeChange,
+          'maxDate': this._data.date.close
         }
     );
   }
@@ -233,7 +235,8 @@ export default class WaypointEditor extends SmartView {
           'time_24hr': true,
           'dateFormat': `d/m/y H:i`,
           'defaultDate': this._data.date.close,
-          'onChange': this._onEndTimeChange
+          'onClose': this._onEndTimeChange,
+          'minDate': this._data.date.start
         }
     );
   }
@@ -247,7 +250,7 @@ export default class WaypointEditor extends SmartView {
       .addEventListener(`click`, this._onTypeChange);
     this.getElement()
       .querySelector(`.event__input--destination`)
-      .addEventListener(`focusout`, this._onDestinationChange);
+      .addEventListener(`input`, this._onDestinationChange);
     this.getElement()
       .querySelector(`.event__section--offers`)
       .addEventListener(`click`, this._onOffersListChange);
@@ -296,17 +299,26 @@ export default class WaypointEditor extends SmartView {
   }
 
   _onDestinationChange(evt) {
-    const destination = getDestination(DESTINATIONS, evt.target.value);
-    this.updateData({
-      destination: Object.assign(
-          {},
-          destination,
-          {
-            isDescription: destination.description !== null && destination.description !== ``,
-            isPhoto: destination.pictures !== null && destination.pictures.length > 0
-          }
-      )
-    });
+    const inputDestination = evt.target;
+    const destination = getDestination(DESTINATIONS, inputDestination.value);
+
+    inputDestination.setCustomValidity(``);
+
+    if (isValidDestination(DESTINATIONS, inputDestination.value)) {
+      this.updateData({
+        destination: Object.assign(
+            {},
+            destination,
+            {
+              isDescription: destination.description !== null && destination.description !== ``,
+              isPhoto: destination.pictures !== null && destination.pictures.length > 0
+            }
+        )
+      });
+      return;
+    }
+
+    inputDestination.setCustomValidity(`Выбранный пункт назначения должен быть из предложенного списка`);
   }
 
   _onPriceChange(evt) {
@@ -322,7 +334,7 @@ export default class WaypointEditor extends SmartView {
           this._data.date,
           {start: dayjs(userDate).toDate()}
       )
-    }, true);
+    });
   }
 
   _onEndTimeChange([userDate]) {
@@ -332,7 +344,7 @@ export default class WaypointEditor extends SmartView {
           this._data.date,
           {close: dayjs(userDate).toDate()}
       )
-    }, true);
+    });
   }
 
   _onOffersListChange(evt) {
