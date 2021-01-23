@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import he from 'he';
 import flatpickr from 'flatpickr';
 import SmartView from './smart.js';
 import {humanizeDate} from '../util/waypoint.js';
@@ -28,6 +29,14 @@ const BLANK_WAYPOINT = {
   isFavorites: false
 };
 
+const createRolldownBtnTemplate = () => {
+  return (
+    `<button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+    </button>`
+  );
+};
+
 const createWaypointEditorTemplate = (data, isCreate) => {
 
   const TIME_FORMAT = `DD/MM/YY HH:mm`;
@@ -47,6 +56,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
   const closeTime = humanizeDate(closeDate, TIME_FORMAT);
   const offersSection = createOffersSectionTemplate(type, offers, isOffers);
   const destinationSection = createDestinationSectionTemplate(destination);
+  const rolldownBtn = !isCreate ? createRolldownBtnTemplate() : ``;
 
   return (
     `<form class="event event--edit" action="#" method="post">
@@ -73,7 +83,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
             id="event-destination-${id}"
             type="text"
             name="event-destination"
-            value="${destination.name}"
+            value="${he.encode(destination.name)}"
             list="destination-list-1"
             autocomplete="off"
             required
@@ -90,7 +100,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
             id="event-start-time-${id}"
             type="text"
             name="event-start-time"
-            value="${startTime}"
+            value="${he.encode(startTime)}"
             required
           />
           &mdash;
@@ -100,7 +110,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
             id="event-end-time-${id}"
             type="text"
             name="event-end-time"
-            value="${closeTime}"
+            value="${he.encode(closeTime)}"
             required
           />
         </div>
@@ -122,9 +132,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn${isCreate ? ` visually-hidden` : ``}" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
+        ${rolldownBtn}
       </header>
       <section class="event__details">
 
@@ -143,6 +151,7 @@ export default class WaypointEditor extends SmartView {
     this._element = null;
     this._datepickerStart = null;
     this._datepickerEnd = null;
+    this._isCreate = waypoint === BLANK_WAYPOINT;
 
     this._onRolldownBtnClick = this._onRolldownBtnClick.bind(this);
     this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
@@ -178,14 +187,19 @@ export default class WaypointEditor extends SmartView {
   }
 
   _getTemplate() {
-    return createWaypointEditorTemplate(this._data);
+    return createWaypointEditorTemplate(this._data, this._isCreate);
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
     this.setOnEditFormSubmit(this._callback.submit);
-    this.setOnRolldownBtnClick(this._callback.rolldownClick);
     this.setOnDeleteBtnClick(this._callback.deleteClick);
+
+    if (this._isCreate) {
+      return;
+    }
+
+    this.setOnRolldownBtnClick(this._callback.rolldownClick);
   }
 
   _setOnStartTimeDatepicker() {
