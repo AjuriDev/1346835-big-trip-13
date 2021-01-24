@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractView from './abstract.js';
 
 const WAYPOINTS_SHORT = 2;
 const MAX_WAYPOINTS_LONG = 3;

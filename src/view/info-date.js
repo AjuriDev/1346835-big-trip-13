@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import AbstractView from "./abstract.js";
+import AbstractView from './abstract.js';
 
 const MONTH_LETTERS_NUMBER = 3;
 const MONTH_DROP_LETTERS_NUMBER = 4;

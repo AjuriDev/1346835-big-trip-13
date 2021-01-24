@@ -1,6 +1,7 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
 import TripWaypointView from '../view/trip-waypoint.js';
 import {render, replace, remove, RenderPosition} from '../util/render.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -22,6 +23,7 @@ export default class Waypoint {
     this._handleEditFormSubmit = this._handleEditFormSubmit.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(waypoint) {
@@ -36,7 +38,8 @@ export default class Waypoint {
     this._waypointComponent.setOnRollupBtnClick(this._handleEditClick);
     this._waypointComponent.setOnFavoriteBtnClick(this._handleFavoriteClick);
     this._waypointEditComponent.setOnEditFormSubmit(this._handleEditFormSubmit);
-    this._waypointEditComponent.setOnRollupBtnClick(this._handleEditFormCancel);
+    this._waypointEditComponent.setOnRolldownBtnClick(this._handleEditFormCancel);
+    this._waypointEditComponent.setOnDeleteBtnClick(this._handleDeleteClick);
 
     if (prevWaypointComponent === null || prevWaypointEditComponent === null) {
       render(this._waypointsListContainer, this._waypointComponent, RenderPosition.AFTERBEGIN);
@@ -93,6 +96,8 @@ export default class Waypoint {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_WAYPOINT,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._waypoint,
@@ -109,7 +114,19 @@ export default class Waypoint {
   }
 
   _handleEditFormSubmit(waypoint) {
-    this._changeData(waypoint);
+    this._changeData(
+        UserAction.UPDATE_WAYPOINT,
+        UpdateType.MINOR,
+        waypoint
+    );
     this._replaceFormToCard();
+  }
+
+  _handleDeleteClick(waypoint) {
+    this._changeData(
+        UserAction.DELETE_WAYPOINT,
+        UpdateType.MINOR,
+        waypoint
+    );
   }
 }

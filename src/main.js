@@ -4,17 +4,24 @@ import InfoTitleView from './view/info-title.js';
 import InfoDateView from './view/info-date.js';
 import InfoCostView from './view/info-cost.js';
 import TripTabsView from './view/trip-tabs.js';
-import TripFiltersView from './view/trip-filters.js';
 import TripControlsView from './view/trip-controls.js';
 import NewWaypointBtn from './view/new-waypoint-btn.js';
 import {generateWaypoint} from './mock/waypoint.js';
-import TripPresenter from "./presenter/trip.js";
+import TripPresenter from './presenter/trip.js';
+import FilterPresenter from './presenter/filter.js';
+import WaypointsModel from './model/waypoints.js';
+import FilterModel from './model/filter.js';
 import {render} from './util/render.js';
 
 const WAYPOINTS_NUMBER = 15;
 const waypoints = Array(WAYPOINTS_NUMBER)
   .fill()
   .map(generateWaypoint);
+
+const waypointsModel = new WaypointsModel();
+waypointsModel.setWaypoints(waypoints);
+
+const filterModel = new FilterModel();
 
 const siteHeaderElement = document.querySelector(`.page-header`);
 const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
@@ -27,7 +34,6 @@ render(tripMainElement, new NewWaypointBtn());
 
 const tripControls = new TripControlsView();
 render(tripMainElement, tripControls);
-render(tripControls, new TripFiltersView());
 render(tripControls, new TripTabsView());
 
 // добавляем блок "Маршрут и стоимость"
@@ -44,5 +50,13 @@ render(infoMain, new InfoTitleView(waypoints));
 const siteMainElement = document.querySelector(`.page-main`);
 const tripContainerElement = siteMainElement.querySelector(`.page-body__container`);
 
-const tripPresenter = new TripPresenter(tripContainerElement);
-tripPresenter.init(waypoints);
+const tripPresenter = new TripPresenter(tripContainerElement, waypointsModel, filterModel);
+const filterPresenter = new FilterPresenter(tripControls, filterModel);
+
+tripPresenter.init();
+filterPresenter.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  tripPresenter.createWaypoint();
+});

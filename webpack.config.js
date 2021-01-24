@@ -5,7 +5,10 @@ module.exports = {
     './src/util/common.js',
     './src/util/render.js',
     './src/util/waypoint.js',
+    './src/util/observer.js',
     './src/const.js',
+    './src/model/waypoints.js',
+    './src/model/filter.js',
     './src/view/abstract.js',
     './src/view/trip.js',
     './src/view/trip-info.js',
@@ -33,6 +36,7 @@ module.exports = {
     './src/view/new-waypoint-message.js',
     './src/presenter/trip.js',
     './src/presenter/waypoint.js',
+    './src/presenter/filter.js',
     './src/main.js',
   ],
   output: {

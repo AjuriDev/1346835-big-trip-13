@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractView from './abstract.js';
 import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointOffersTemplate} from './waypoint-offers.js';
 import {createScheduleTemplate} from './schedule.js';

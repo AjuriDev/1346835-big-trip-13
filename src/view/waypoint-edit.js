@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
-import SmartView from "./smart.js";
+import SmartView from './smart.js';
 import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
@@ -10,18 +10,35 @@ import {getOffers} from '../mock/offers.js';
 import {getDestination} from '../mock/destination.js';
 import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
 
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => {
+const BLANK_WAYPOINT = {
+  type: DEFAULT_TYPE,
+  destination: {
+    name: ``,
+    description: ``,
+    pictures: []
+  },
+  offers: [],
+  date: {
+    start: ``,
+    close: ``
+  },
+  price: ``,
+  isFavorites: false
+};
+
+const createWaypointEditorTemplate = (data, isCreate) => {
 
   const TIME_FORMAT = `DD/MM/YY HH:mm`;
 
   const {
-    type = DEFAULT_TYPE,
-    destination = null,
-    offers = [],
+    id,
+    type,
+    destination,
+    offers,
     date: {start: startDate, close: closeDate},
-    price = ``,
+    price,
     isOffers,
   } = data;
   const typeList = createWaypointTypeListTemplate(type);
@@ -39,7 +56,11 @@ const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => 
             <span class="visually-hidden">Choose event type</span>
             <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
           </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+          <input
+            class="event__type-toggle  visually-hidden"
+            id="event-type-toggle-${id}"
+            type="checkbox"
+          />
           ${typeList}
         </div>
 
@@ -47,18 +68,41 @@ const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => 
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
-          <datalist id="destination-list-1">
+          <input
+            class="event__input  event__input--destination"
+            id="event-destination-${id}"
+            type="text"
+            name="event-destination"
+            value="${destination.name}"
+            list="destination-list-1"
+            autocomplete="off"
+            required
+          />
+          <datalist id="destination-list-${id}">
             ${optionList}
           </datalist>
         </div>
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startTime}">
+          <input
+            class="event__input  event__input--time"
+            id="event-start-time-${id}"
+            type="text"
+            name="event-start-time"
+            value="${startTime}"
+            required
+          />
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${closeTime}">
+          <input
+            class="event__input  event__input--time"
+            id="event-end-time-${id}"
+            type="text"
+            name="event-end-time"
+            value="${closeTime}"
+            required
+          />
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -66,12 +110,19 @@ const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => 
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+          <input
+            class="event__input  event__input--price"
+            id="event-price-${id}"
+            type="number"
+            name="event-price"
+            value="${price}"
+            required
+          />
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn" type="button">
+        <button class="event__rollup-btn${isCreate ? ` visually-hidden` : ``}" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
       </header>
@@ -86,14 +137,14 @@ const createWaypointEditorTemplate = (data = {date: {start: ``, close: ``}}) => 
 };
 
 export default class WaypointEditor extends SmartView {
-  constructor(waypoint) {
+  constructor(waypoint = BLANK_WAYPOINT) {
     super();
     this._data = this._parseWaypointToData(waypoint);
     this._element = null;
     this._datepickerStart = null;
     this._datepickerEnd = null;
 
-    this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
+    this._onRolldownBtnClick = this._onRolldownBtnClick.bind(this);
     this._onEditFormSubmit = this._onEditFormSubmit.bind(this);
     this._onTypeChange = this._onTypeChange.bind(this);
     this._onDestinationChange = this._onDestinationChange.bind(this);
@@ -101,8 +152,23 @@ export default class WaypointEditor extends SmartView {
     this._onStartTimeChange = this._onStartTimeChange.bind(this);
     this._onEndTimeChange = this._onEndTimeChange.bind(this);
     this._onOffersListChange = this._onOffersListChange.bind(this);
+    this._onDeleteBtnClick = this._onDeleteBtnClick.bind(this);
 
     this._setInnerHandlers();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    if (this._datepickerEnd) {
+      this._datepickerEnd.destroy();
+      this._datepickerEnd = null;
+    }
   }
 
   reset(waypoint) {
@@ -118,7 +184,8 @@ export default class WaypointEditor extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setOnEditFormSubmit(this._callback.submit);
-    this.setOnRollupBtnClick(this._callback.click);
+    this.setOnRolldownBtnClick(this._callback.rolldownClick);
+    this.setOnDeleteBtnClick(this._callback.deleteClick);
   }
 
   _setOnStartTimeDatepicker() {
@@ -184,14 +251,24 @@ export default class WaypointEditor extends SmartView {
     this.getElement().addEventListener(`submit`, this._onEditFormSubmit);
   }
 
-  _onRollupBtnClick(evt) {
+  _onRolldownBtnClick(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.rolldownClick();
   }
 
-  setOnRollupBtnClick(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRollupBtnClick);
+  setOnRolldownBtnClick(callback) {
+    this._callback.rolldownClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onRolldownBtnClick);
+  }
+
+  _onDeleteBtnClick(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._parseDataToWaypoint(this._data));
+  }
+
+  setOnDeleteBtnClick(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._onDeleteBtnClick);
   }
 
   _onTypeChange(evt) {
