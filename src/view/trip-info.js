@@ -1,5 +1,6 @@
 import AbstractView from './abstract.js';
 
+
 const createInfoBlockTemplate = () => {
   return `<section class="trip-main__trip-info  trip-info"></section>`;
 };

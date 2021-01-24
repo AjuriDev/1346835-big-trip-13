@@ -9,9 +9,11 @@ import {createOffersSectionTemplate} from './waypoint-offers.js';
 import {createDestinationSectionTemplate} from './waypoint-destination.js';
 import {getOffers} from '../mock/offers.js';
 import {getDestination, isValidDestination} from '../util/destination.js';
-import {DEFAULT_TYPE, DESTINATIONS} from '../const.js';
+import {DEFAULT_TYPE, TIME_FORMAT, DESTINATIONS} from '../const.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
+const DEFAULT_DURATION_HOURS = 1;
 
 const BLANK_WAYPOINT = {
   type: DEFAULT_TYPE,
@@ -22,8 +24,8 @@ const BLANK_WAYPOINT = {
   },
   offers: [],
   date: {
-    start: ``,
-    close: ``
+    start: dayjs().toDate(),
+    close: dayjs().add(DEFAULT_DURATION_HOURS, `hour`).toDate()
   },
   price: ``,
   isFavorites: false
@@ -39,10 +41,7 @@ const createRolldownBtnTemplate = () => {
 
 const createWaypointEditorTemplate = (data, isCreate) => {
 
-  const TIME_FORMAT = `DD/MM/YY HH:mm`;
-
   const {
-    id,
     type,
     destination,
     offers,
@@ -57,6 +56,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
   const offersSection = createOffersSectionTemplate(type, offers, isOffers);
   const destinationSection = createDestinationSectionTemplate(destination);
   const rolldownBtn = !isCreate ? createRolldownBtnTemplate() : ``;
+  const close = isCreate ? `Cancel` : `Delete`;
 
   return (
     `<form class="event event--edit" action="#" method="post">
@@ -68,7 +68,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
           </label>
           <input
             class="event__type-toggle  visually-hidden"
-            id="event-type-toggle-${id}"
+            id="event-type-toggle-1"
             type="checkbox"
           />
           ${typeList}
@@ -80,7 +80,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
           </label>
           <input
             class="event__input  event__input--destination"
-            id="event-destination-${id}"
+            id="event-destination-1"
             type="text"
             name="event-destination"
             value="${he.encode(destination.name)}"
@@ -88,7 +88,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
             autocomplete="off"
             required
           />
-          <datalist id="destination-list-${id}">
+          <datalist id="destination-list-1">
             ${optionList}
           </datalist>
         </div>
@@ -97,7 +97,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
           <label class="visually-hidden" for="event-start-time-1">From</label>
           <input
             class="event__input  event__input--time"
-            id="event-start-time-${id}"
+            id="event-start-time-1"
             type="text"
             name="event-start-time"
             value="${he.encode(startTime)}"
@@ -107,7 +107,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
           <label class="visually-hidden" for="event-end-time-1">To</label>
           <input
             class="event__input  event__input--time"
-            id="event-end-time-${id}"
+            id="event-end-time-1"
             type="text"
             name="event-end-time"
             value="${he.encode(closeTime)}"
@@ -122,7 +122,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
           </label>
           <input
             class="event__input  event__input--price"
-            id="event-price-${id}"
+            id="event-price-1"
             type="number"
             name="event-price"
             value="${price}"
@@ -132,7 +132,7 @@ const createWaypointEditorTemplate = (data, isCreate) => {
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
+        <button class="event__reset-btn" type="reset">${close}</button>
         ${rolldownBtn}
       </header>
       <section class="event__details">
@@ -323,7 +323,7 @@ export default class WaypointEditor extends SmartView {
 
   _onPriceChange(evt) {
     this.updateData({
-      price: evt.target.value
+      price: parseInt(evt.target.value, 10)
     }, true);
   }
 

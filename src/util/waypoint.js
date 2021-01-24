@@ -11,8 +11,8 @@ const calculateDuration = (startTime, closeTime) => {
   const start = dayjs(startTime);
   const end = dayjs(closeTime);
   const days = end.diff(start, `day`) % 30 < 10
-    ? `0${end.diff(start, `day`) % 30}`
-    : end.diff(start, `day`) % 30;
+    ? `0${end.diff(start, `day`)}`
+    : end.diff(start, `day`);
   const hours = end.diff(start, `hour`) % 24 < 10
     ? `0${end.diff(start, `hour`) % 24}`
     : end.diff(start, `hour`) % 24;
@@ -52,4 +52,8 @@ const isWaypointPast = (dateTo) => {
   return dayjs().diff(dayjs(dateTo)) > 0;
 };
 
-export {humanizeDate, calculateDuration, sortDateUp, sortTimeUp, sortPriceUp, isWaypointFuture, isWaypointPast};
+const countWaypointDuration = ({date: {start, close}}) => {
+  return dayjs(close).diff(dayjs(start));
+};
+
+export {humanizeDate, calculateDuration, sortDateUp, sortTimeUp, sortPriceUp, isWaypointFuture, isWaypointPast, countWaypointDuration};

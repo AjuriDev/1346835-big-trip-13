@@ -13,4 +13,4 @@ const getDestination = (destinations, destination) => {
   return destinations.find((dest) => dest.name === destination);
 };
 
-export {getDestination, isValidDestination}
+export {getDestination, isValidDestination};

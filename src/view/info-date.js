@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {sortDateUp} from '../util/waypoint.js';
 import AbstractView from './abstract.js';
 
 const MONTH_LETTERS_NUMBER = 3;
@@ -9,6 +10,7 @@ const isSameMonth = (start, close) => {
 };
 
 const createInfoDateTemplate = (waypoints) => {
+  waypoints = waypoints.slice().sort(sortDateUp);
   const startDate = dayjs(waypoints[0].date.start).format(`MMM DD`);
   const closeDate = dayjs(waypoints[waypoints.length - 1].date.close).format(`MMM DD`);
   const tripDuration = isSameMonth(startDate, closeDate) ? closeDate.slice(MONTH_DROP_LETTERS_NUMBER) : closeDate;
