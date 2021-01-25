@@ -4,6 +4,7 @@ const TYPES = [`Check-in`, `Sightseeing`, `Restaurant`, `Taxi`, `Bus`, `Train`, 
 const DEFAULT_TYPE = `Flight`;
 const DESTINATION_NAMES = [`Amsterdam`, `Geneva`, `Chamonix`];
 const DESTINATIONS = DESTINATION_NAMES.map(generateDestination);
+const TIME_FORMAT = `DD/MM/YY HH:mm`;
 
 const SortType = {
   DEFAULT: `default`,
@@ -29,4 +30,20 @@ const FilterType = {
   PAST: `past`
 };
 
-export {TYPES, DEFAULT_TYPE, DESTINATION_NAMES, DESTINATIONS, SortType, UserAction, UpdateType, FilterType};
+const MenuItem = {
+  TABLE: `TABLE`,
+  STATS: `STATS`
+};
+
+export {
+  TYPES,
+  DEFAULT_TYPE,
+  DESTINATION_NAMES,
+  DESTINATIONS,
+  TIME_FORMAT,
+  SortType,
+  UserAction,
+  UpdateType,
+  FilterType,
+  MenuItem
+};
