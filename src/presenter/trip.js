@@ -1,7 +1,7 @@
 import TripView from '../view/trip.js';
 import TripSortView from '../view/trip-sort.js';
 import WaypointsListView from '../view/waypoints-list.js';
-import NewWaypointMessage from '../view/new-waypoint-message.js';
+import NewWaypointMessageView from '../view/new-waypoint-message.js';
 import WaypointPresenter from './waypoint.js';
 import WaypointNewPresenter from "./new-waypoint.js";
 import {sortDateUp, sortTimeUp, sortPriceUp} from '../util/waypoint.js';
@@ -21,7 +21,7 @@ export default class Trip {
 
     this._tripComponent = new TripView();
     this._waypointListComponent = null;
-    this._newWaypointMessageComponent = new NewWaypointMessage();
+    this._newWaypointMessageComponent = new NewWaypointMessageView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);

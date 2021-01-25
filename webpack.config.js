@@ -40,6 +40,7 @@ module.exports = {
     './src/presenter/trip.js',
     './src/presenter/waypoint.js',
     './src/presenter/filter.js',
+    './src/presenter/info.js',
     './src/main.js',
   ],
   output: {

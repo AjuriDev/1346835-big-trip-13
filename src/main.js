@@ -1,8 +1,3 @@
-import InfoBlockView from './view/trip-info.js';
-import InfoMainView from './view/info-main.js';
-import InfoTitleView from './view/info-title.js';
-import InfoDateView from './view/info-date.js';
-import InfoCostView from './view/info-cost.js';
 import SiteMenuView from './view/site-menu.js';
 import TripControlsView from './view/trip-controls.js';
 import NewWaypointBtn from './view/new-waypoint-btn.js';
@@ -10,6 +5,7 @@ import StatisticsView from "./view/statistics.js";
 import {generateWaypoint} from './mock/waypoint.js';
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
+import InfoPresenter from './presenter/info.js';
 import WaypointsModel from './model/waypoints.js';
 import FilterModel from './model/filter.js';
 import {render, remove} from './util/render.js';
@@ -75,22 +71,13 @@ const handleSiteMenuClick = (menuItem) => {
 
 siteMenuComponent.setOnSiteMenuClick(handleSiteMenuClick);
 
-// добавляем блок "Маршрут и стоимость"
-const infoBlock = new InfoBlockView();
-render(tripMainElement, infoBlock);
-render(infoBlock, new InfoCostView(waypoints));
-
-const infoMain = new InfoMainView();
-render(infoBlock, infoMain);
-render(infoMain, new InfoDateView(waypoints));
-render(infoMain, new InfoTitleView(waypoints));
-
-
 const siteMainElement = document.querySelector(`.page-main`);
 const pageContainerElement = siteMainElement.querySelector(`.page-body__container`);
 
 const tripPresenter = new TripPresenter(pageContainerElement, waypointsModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControls, filterModel);
+const infoPresenter = new InfoPresenter(tripMainElement, waypointsModel);
 
 tripPresenter.init();
 filterPresenter.init();
+infoPresenter.init();
