@@ -38,10 +38,6 @@ export default class Info {
     this._waypointsModel.removeObserver(this._handleModelEvent);
   }
 
-  _getWaypoints() {
-    return this._waypointsModel.getWaypoints().sort(sortDateUp);
-  }
-
   _handleModelEvent(updateType) {
     switch (updateType) {
       case UpdateType.PATCH:
@@ -55,6 +51,10 @@ export default class Info {
         this._renderInfo();
         break;
     }
+  }
+
+  _getWaypoints() {
+    return this._waypointsModel.getWaypoints().sort(sortDateUp);
   }
 
   _renderInfoTitle(waypoints) {

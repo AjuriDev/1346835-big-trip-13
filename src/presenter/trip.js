@@ -58,23 +58,6 @@ export default class Trip {
     this._waypointNewPresenter.init();
   }
 
-  _getWaypoints() {
-    const filterType = this._filterModel.getFilter();
-    const waypoints = this._waypointsModel.getWaypoints();
-    const filtredWaypoints = filter[filterType](waypoints);
-
-    switch (this._currentSortType) {
-      case SortType.DEFAULT:
-        return filtredWaypoints.sort(sortDateUp);
-      case SortType.TIME_UP:
-        return filtredWaypoints.sort(sortTimeUp);
-      case SortType.PRICE_UP:
-        return filtredWaypoints.sort(sortPriceUp);
-    }
-
-    return this._waypointsModel.getWaypoints();
-  }
-
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_WAYPOINT:
@@ -103,6 +86,23 @@ export default class Trip {
         this._renderTrip();
         break;
     }
+  }
+
+  _getWaypoints() {
+    const filterType = this._filterModel.getFilter();
+    const waypoints = this._waypointsModel.getWaypoints();
+    const filtredWaypoints = filter[filterType](waypoints);
+
+    switch (this._currentSortType) {
+      case SortType.DEFAULT:
+        return filtredWaypoints.sort(sortDateUp);
+      case SortType.TIME_UP:
+        return filtredWaypoints.sort(sortTimeUp);
+      case SortType.PRICE_UP:
+        return filtredWaypoints.sort(sortPriceUp);
+    }
+
+    return this._waypointsModel.getWaypoints();
   }
 
   _handleModeChange() {
