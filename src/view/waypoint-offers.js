@@ -22,8 +22,8 @@ const createWaypointOffersTemplate = (type, waypointOffers) => {
 const createOfferTemplate = (offer, offersNames) => {
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}"${offersNames.includes(offer.title) ? ` checked` : ``}>
-      <label class="event__offer-label" for="event-offer-${offer.id}-1" data-title="${offer.title}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}" type="checkbox" name="event-offer-${offer.title}"${offersNames.includes(offer.title) ? ` checked` : ``}>
+      <label class="event__offer-label" for="event-offer-${offer.title}" data-title="${offer.title}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>

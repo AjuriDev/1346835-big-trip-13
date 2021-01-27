@@ -1,76 +1,190 @@
-const OFFERS = {
-  'Flight': [
-    {
-      id: `luggage`,
-      title: `Add luggage`,
-      price: 30
-    },
-    {
-      id: `comfort`,
-      title: `Switch to comfort`,
-      price: 80
-    },
-    {
-      id: `meal`,
-      title: `Add meal`,
-      price: 15
-    },
-    {
-      id: `seats`,
-      title: `Choose seats`,
-      price: 5
-    },
-    {
-      id: `train`,
-      title: `Travel by train`,
-      price: 40
-    },
-  ],
-  'Taxi': [
-    {
-      id: `uber`,
-      title: `Order Uber`,
-      price: 20
-    }
-  ],
-  'Drive': [
-    {
-      id: `car`,
-      title: `Rent a car`,
-      price: 200
-    }
-  ],
-  'Check-in': [
-    {
-      id: `breakfast`,
-      title: `Add breakfast`,
-      price: 50
-    }
-  ],
-  'Sightseeing': [
-    {
-      id: `tickets`,
-      title: `Book tickets`,
-      price: 40
-    },
-    {
-      id: `lunch`,
-      title: `Lunch in city`,
-      price: 30
-    }
-  ]
-};
+const OFFERS = [
+  {
+    "type": "taxi",
+    "offers": [
+      {
+        "title": "Upgrade to a business class",
+        "price": 190
+      },
+      {
+        "title": "Choose the radio station",
+        "price": 30
+      },
+      {
+        "title": "Choose temperature",
+        "price": 170
+      },
+      {
+        "title": "Drive quickly, I'm in a hurry",
+        "price": 100
+      },
+      {
+        "title": "Drive slowly",
+        "price": 110
+      }
+    ]
+  },
+  {
+    "type": "bus",
+    "offers": [
+      {
+        "title": "Infotainment system",
+        "price": 50
+      },
+      {
+        "title": "Order meal",
+        "price": 100
+      },
+      {
+        "title": "Choose seats",
+        "price": 190
+      }
+    ]
+  },
+  {
+    "type": "train",
+    "offers": [
+      {
+        "title": "Book a taxi at the arrival point",
+        "price": 110
+      },
+      {
+        "title": "Order a breakfast",
+        "price": 80
+      },
+      {
+        "title": "Wake up at a certain time",
+        "price": 140
+      }
+    ]
+  },
+  {
+    "type": "flight",
+    "offers": [
+      {
+        "title": "Choose meal",
+        "price": 120
+      },
+      {
+        "title": "Choose seats",
+        "price": 90
+      },
+      {
+        "title": "Upgrade to comfort class",
+        "price": 120
+      },
+      {
+        "title": "Upgrade to business class",
+        "price": 120
+      },
+      {
+        "title": "Add luggage",
+        "price": 170
+      },
+      {
+        "title": "Business lounge",
+        "price": 160
+      }
+    ]
+  },
+  {
+    "type": "check-in",
+    "offers": [
+      {
+        "title": "Choose the time of check-in",
+        "price": 70
+      },
+      {
+        "title": "Choose the time of check-out",
+        "price": 190
+      },
+      {
+        "title": "Add breakfast",
+        "price": 110
+      },
+      {
+        "title": "Laundry",
+        "price": 140
+      },
+      {
+        "title": "Order a meal from the restaurant",
+        "price": 30
+      }
+    ]
+  },
+  {
+    "type": "sightseeing",
+    "offers": []
+  },
+  {
+    "type": "ship",
+    "offers": [
+      {
+        "title": "Choose meal",
+        "price": 130
+      },
+      {
+        "title": "Choose seats",
+        "price": 160
+      },
+      {
+        "title": "Upgrade to comfort class",
+        "price": 170
+      },
+      {
+        "title": "Upgrade to business class",
+        "price": 150
+      },
+      {
+        "title": "Add luggage",
+        "price": 100
+      },
+      {
+        "title": "Business lounge",
+        "price": 40
+      }
+    ]
+  },
+  {
+    "type": "transport",
+    "offers": []
+  },
+  {
+    "type": "drive",
+    "offers": [
+      {
+        "title": "Choose comfort class",
+        "price": 110
+      },
+      {
+        "title": "Choose business class",
+        "price": 180
+      }
+    ]
+  },
+  {
+    "type": "restaurant",
+    "offers": [
+      {
+        "title": "Choose live music",
+        "price": 150
+      },
+      {
+        "title": "Choose VIP area",
+        "price": 70
+      }
+    ]
+  }
+];
 
 const getOffers = (type) => {
-  if (OFFERS[type]) {
-    return OFFERS[type];
+  const offersByType = OFFERS.find((offer) => offer['type'] === type);
+
+  if (offersByType === undefined) {
+    return [];
   }
-  return [];
+
+  return offersByType.offers;
 };
 
-const generateOffersNames = (type) => {
-  const offers = getOffers(type);
-  return offers.map((offer) => offer.name);
-};
-
-export {getOffers, generateOffersNames};
+export {getOffers};
