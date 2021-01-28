@@ -3,7 +3,7 @@ import {humanizeDate} from '../util/waypoint.js';
 import {createWaypointOffersTemplate} from './waypoint-offers.js';
 import {createScheduleTemplate} from './schedule.js';
 
-const createWaypointTemplate = (waypoint) => {
+const createWaypointTemplate = (waypoint, byTypeOffers) => {
   const {
     type,
     destination,
@@ -21,7 +21,7 @@ const createWaypointTemplate = (waypoint) => {
   const favoriteClassName = isFavorites
     ? `event__favorite-btn event__favorite-btn--active`
     : `event__favorite-btn`;
-  const offersList = createWaypointOffersTemplate(type, offers);
+  const offersList = createWaypointOffersTemplate(type, offers, byTypeOffers);
   const shedule = createScheduleTemplate(startDate, closeDate);
 
   return (
@@ -53,9 +53,10 @@ const createWaypointTemplate = (waypoint) => {
 };
 
 export default class TripWaypoint extends AbstractView {
-  constructor(waypoint) {
+  constructor(waypoint, offers) {
     super();
     this._waypoint = waypoint;
+    this._offers = offers;
     this._element = null;
 
     this._onRollupBtnClick = this._onRollupBtnClick.bind(this);
@@ -63,7 +64,7 @@ export default class TripWaypoint extends AbstractView {
   }
 
   _getTemplate() {
-    return createWaypointTemplate(this._waypoint);
+    return createWaypointTemplate(this._waypoint, this._offers);
   }
 
   _onRollupBtnClick(evt) {

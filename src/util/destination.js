@@ -1,16 +1,16 @@
-const isValidDestination = (destinations, destination) => {
-  return destinations.map((dest) => dest.name).includes(destination);
+const isValidDestination = (destinations, destinationName) => {
+  return destinations.map((destination) => destination.name).includes(destinationName);
 };
 
-const getDestination = (destinations, destination) => {
-  if (!isValidDestination(destinations, destination)) {
+const getDestination = (destinations, destinationName) => {
+  if (!isValidDestination(destinations, destinationName)) {
     return {
-      name: destination,
+      name: destinationName,
       description: ``,
       pictures: []
     };
   }
-  return destinations.find((dest) => dest.name === destination);
+  return destinations.find((destination) => destination.name === destinationName);
 };
 
 export {getDestination, isValidDestination};

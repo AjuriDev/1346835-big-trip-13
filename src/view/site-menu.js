@@ -22,6 +22,14 @@ export default class SiteMenu extends AbstractView {
     return createSiteMenuTemplate();
   }
 
+  toggleSiteMenuItem(menuItem = MenuItem.TABLE) {
+    const items = this.getElement().querySelectorAll(`.trip-tabs__btn`);
+
+    items.forEach((item) => item.classList.remove(`trip-tabs__btn--active`));
+
+    this.getElement().querySelector(`[data-name="${menuItem}"]`).classList.add(`trip-tabs__btn--active`);
+  }
+
   _onSiteMenuClick(evt) {
     evt.preventDefault();
     this._callback.menuClick(evt.target.dataset.name);
@@ -30,13 +38,5 @@ export default class SiteMenu extends AbstractView {
   setOnSiteMenuClick(callback) {
     this._callback.menuClick = callback;
     this.getElement().addEventListener(`click`, this._onSiteMenuClick);
-  }
-
-  toggleSiteMenuItem(menuItem = MenuItem.TABLE) {
-    const items = this.getElement().querySelectorAll(`.trip-tabs__btn`);
-
-    items.forEach((item) => item.classList.remove(`trip-tabs__btn--active`));
-
-    this.getElement().querySelector(`[data-name="${menuItem}"]`).classList.add(`trip-tabs__btn--active`);
   }
 }

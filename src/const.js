@@ -1,9 +1,5 @@
-import {generateDestination} from './mock/destination.js';
-
-const TYPES = [`Check-in`, `Sightseeing`, `Restaurant`, `Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
-const DEFAULT_TYPE = `Flight`;
-const DESTINATION_NAMES = [`Amsterdam`, `Geneva`, `Chamonix`];
-const DESTINATIONS = DESTINATION_NAMES.map(generateDestination);
+const TYPES = [`check-in`, `sightseeing`, `restaurant`, `taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`];
+const DEFAULT_TYPE = `flight`;
 const TIME_FORMAT = `DD/MM/YY HH:mm`;
 
 const SortType = {
@@ -21,7 +17,8 @@ const UserAction = {
 const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 const FilterType = {
@@ -38,8 +35,6 @@ const MenuItem = {
 export {
   TYPES,
   DEFAULT_TYPE,
-  DESTINATION_NAMES,
-  DESTINATIONS,
   TIME_FORMAT,
   SortType,
   UserAction,

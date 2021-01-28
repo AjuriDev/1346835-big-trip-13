@@ -1,9 +1,9 @@
-import {getOffers} from '../mock/offers.js';
+import {getOffers} from '../util/offers.js';
 
-const createWaypointOffersTemplate = (type, waypointOffers) => {
+const createWaypointOffersTemplate = (type, waypointOffers, byTypeOffers) => {
   const offersNames = waypointOffers.map((offer) => offer.title);
   let offersList = ``;
-  const offers = getOffers(type);
+  const offers = getOffers(byTypeOffers, type);
   offers.forEach((offer) => {
     if (offersNames.includes(offer.title)) {
       offersList += (
@@ -22,8 +22,8 @@ const createWaypointOffersTemplate = (type, waypointOffers) => {
 const createOfferTemplate = (offer, offersNames) => {
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}"${offersNames.includes(offer.title) ? ` checked` : ``}>
-      <label class="event__offer-label" for="event-offer-${offer.id}-1" data-title="${offer.title}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}" type="checkbox" name="event-offer-${offer.title}"${offersNames.includes(offer.title) ? ` checked` : ``}>
+      <label class="event__offer-label" for="event-offer-${offer.title}" data-title="${offer.title}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
@@ -32,7 +32,7 @@ const createOfferTemplate = (offer, offersNames) => {
   );
 };
 
-const createOffersSectionTemplate = (type, waypointOffers, isOffers) => {
+const createOffersSectionTemplate = (type, waypointOffers, isOffers, offersList) => {
   if (!isOffers) {
     return (
       `<section class="event__section  event__section--offers visually-hidden">
@@ -41,7 +41,7 @@ const createOffersSectionTemplate = (type, waypointOffers, isOffers) => {
     );
   }
   const offersNames = waypointOffers.map((offer) => offer.title);
-  const offers = getOffers(type);
+  const offers = getOffers(offersList, type);
   const options = offers.map((offer) => createOfferTemplate(offer, offersNames)).join(``);
 
   return (
