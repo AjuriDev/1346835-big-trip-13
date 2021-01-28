@@ -7,9 +7,9 @@ import {createWaypointTypeListTemplate} from './type-list.js';
 import {createDestinationOptionsTemplate} from './destination-options.js';
 import {createOffersSectionTemplate} from './waypoint-offers.js';
 import {createDestinationSectionTemplate} from './waypoint-destination.js';
-import {getOffers} from '../mock/offers.js';
+import {getOffers} from '../util/offers.js';
 import {getDestination, isValidDestination} from '../util/destination.js';
-import {DEFAULT_TYPE, TIME_FORMAT, DESTINATIONS} from '../const.js';
+import {DEFAULT_TYPE, TIME_FORMAT} from '../const.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -39,7 +39,7 @@ const createRolldownBtnTemplate = () => {
   );
 };
 
-const createWaypointEditorTemplate = (data, isCreate) => {
+const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList) => {
 
   const {
     type,
@@ -50,10 +50,10 @@ const createWaypointEditorTemplate = (data, isCreate) => {
     isOffers,
   } = data;
   const typeList = createWaypointTypeListTemplate(type);
-  const optionList = createDestinationOptionsTemplate();
+  const optionList = createDestinationOptionsTemplate(destinationList);
   const startTime = humanizeDate(startDate, TIME_FORMAT);
   const closeTime = humanizeDate(closeDate, TIME_FORMAT);
-  const offersSection = createOffersSectionTemplate(type, offers, isOffers);
+  const offersSection = createOffersSectionTemplate(type, offers, isOffers, offerList);
   const destinationSection = createDestinationSectionTemplate(destination);
   const rolldownBtn = !isCreate ? createRolldownBtnTemplate() : ``;
   const close = isCreate ? `Cancel` : `Delete`;
@@ -146,9 +146,11 @@ const createWaypointEditorTemplate = (data, isCreate) => {
 };
 
 export default class WaypointEditor extends SmartView {
-  constructor(waypoint = BLANK_WAYPOINT) {
+  constructor(destinations, offers, waypoint = BLANK_WAYPOINT) {
     super();
+    this._offers = offers;
     this._data = this._parseWaypointToData(waypoint);
+    this._destinations = destinations;
     this._element = null;
     this._datepickerStart = null;
     this._datepickerEnd = null;
@@ -168,7 +170,7 @@ export default class WaypointEditor extends SmartView {
   }
 
   _getTemplate() {
-    return createWaypointEditorTemplate(this._data, this._isCreate);
+    return createWaypointEditorTemplate(this._data, this._isCreate, this._destinations, this._offers);
   }
 
   removeElement() {
@@ -214,7 +216,7 @@ export default class WaypointEditor extends SmartView {
       ];
     }
 
-    offers.unshift(getOffers(this._data.type).find((offer) => offer.title === title));
+    offers.unshift(getOffers(this._offers, this._data.type).find((offer) => offer.title === title));
     return offers;
   }
 
@@ -223,7 +225,7 @@ export default class WaypointEditor extends SmartView {
         {},
         waypoint,
         {
-          isOffers: getOffers(waypoint.type).length > 0,
+          isOffers: getOffers(this._offers, waypoint.type).length > 0,
           destination: Object.assign(
               {},
               waypoint.destination,
@@ -298,18 +300,18 @@ export default class WaypointEditor extends SmartView {
       this.updateData({
         type: evt.target.dataset.type,
         offers: [],
-        isOffers: getOffers(evt.target.dataset.type).length > 0,
+        isOffers: getOffers(this._offers, evt.target.dataset.type).length > 0,
       });
     }
   }
 
   _onDestinationChange(evt) {
     const inputDestination = evt.target;
-    const destination = getDestination(DESTINATIONS, inputDestination.value);
+    const destination = getDestination(this._destinations, inputDestination.value);
 
     inputDestination.setCustomValidity(``);
 
-    if (isValidDestination(DESTINATIONS, inputDestination.value)) {
+    if (isValidDestination(this._destinations, inputDestination.value)) {
       this.updateData({
         destination: Object.assign(
             {},

@@ -1,12 +1,15 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
-import {generateId} from "../mock/waypoint.js";
+import {generateId} from "../util/waypoint.js";
 import {render, remove} from '../util/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
 export default class WaypointNew {
-  constructor(waypointsListContainer, changeData) {
+  constructor(waypointsListContainer, newWaypointBtn, changeData, destinations, offers) {
     this._waypointsListContainer = waypointsListContainer;
+    this._newWaypointBtn = newWaypointBtn;
     this._changeData = changeData;
+    this._destinations = destinations;
+    this._offers = offers;
 
     this._waypointEditComponent = null;
 
@@ -20,7 +23,7 @@ export default class WaypointNew {
       return;
     }
 
-    this._waypointEditComponent = new WaypointEditorView();
+    this._waypointEditComponent = new WaypointEditorView(this._destinations, this._offers);
 
     this._waypointEditComponent.setOnEditFormSubmit(this._handleEditFormSubmit);
     this._waypointEditComponent.setOnDeleteBtnClick(this._handleDeleteClick);
@@ -51,12 +54,14 @@ export default class WaypointNew {
 
   _handleDeleteClick() {
     this.destroy();
+    this._newWaypointBtn.activate();
   }
 
   _onEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this.destroy();
+      this._newWaypointBtn.activate();
     }
   }
 }

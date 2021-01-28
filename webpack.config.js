@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: [
+    './src/api.js',
     './src/util/common.js',
     './src/util/render.js',
     './src/util/waypoint.js',
@@ -31,9 +32,7 @@ module.exports = {
     './src/view/waypoint-edit.js',
     './src/view/schedule.js',
     './src/view/trip-waypoint.js',
-    './src/mock/waypoint.js',
-    './src/mock/offers.js',
-    './src/mock/destination.js',
+    './src/view/loading.js',
     './src/view/waypoint-offers.js',
     './src/view/new-waypoint-message.js',
     './src/view/statistics.js',

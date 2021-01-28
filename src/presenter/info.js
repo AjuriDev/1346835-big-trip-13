@@ -50,6 +50,9 @@ export default class Info {
         this._clearInfo();
         this._renderInfo();
         break;
+      case UpdateType.INIT:
+        this._renderInfo();
+        break;
     }
   }
 
@@ -109,7 +112,12 @@ export default class Info {
   }
 
   _renderInfo() {
+
     const waypoints = this._getWaypoints();
+
+    if (!waypoints.length > 0) {
+      return;
+    }
 
     this._renderInfoMain(waypoints);
     this._renderInfoCost(waypoints);

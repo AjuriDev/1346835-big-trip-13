@@ -16,6 +16,14 @@ export default class NewWaypointBtn extends AbstractView {
     return createNewWaypointBtnTemplate();
   }
 
+  disable() {
+    this.getElement().setAttribute(`disabled`, `disabled`);
+  }
+
+  activate() {
+    this.getElement().removeAttribute(`disabled`);
+  }
+
   _onNewWaypointClick(evt) {
     evt.preventDefault();
     this._callback.createClick();
