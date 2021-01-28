@@ -19,10 +19,17 @@ const createWaypointOffersTemplate = (type, waypointOffers, byTypeOffers) => {
   return offersList;
 };
 
-const createOfferTemplate = (offer, offersNames) => {
+const createOfferTemplate = (offer, offersNames, isDisabled) => {
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}" type="checkbox" name="event-offer-${offer.title}"${offersNames.includes(offer.title) ? ` checked` : ``}>
+      <input
+        class="event__offer-checkbox  visually-hidden"
+        id="event-offer-${offer.title}"
+        type="checkbox"
+        name="event-offer-${offer.title}"
+        ${offersNames.includes(offer.title) ? ` checked` : ``}
+        ${isDisabled ? `disabled` : ``}
+        />
       <label class="event__offer-label" for="event-offer-${offer.title}" data-title="${offer.title}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
@@ -32,7 +39,7 @@ const createOfferTemplate = (offer, offersNames) => {
   );
 };
 
-const createOffersSectionTemplate = (type, waypointOffers, isOffers, offersList) => {
+const createOffersSectionTemplate = (type, waypointOffers, isOffers, offersList, isDisabled) => {
   if (!isOffers) {
     return (
       `<section class="event__section  event__section--offers visually-hidden">
@@ -42,7 +49,7 @@ const createOffersSectionTemplate = (type, waypointOffers, isOffers, offersList)
   }
   const offersNames = waypointOffers.map((offer) => offer.title);
   const offers = getOffers(offersList, type);
-  const options = offers.map((offer) => createOfferTemplate(offer, offersNames)).join(``);
+  const options = offers.map((offer) => createOfferTemplate(offer, offersNames, isDisabled)).join(``);
 
   return (
     `<section class="event__section  event__section--offers">

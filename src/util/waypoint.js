@@ -1,7 +1,5 @@
 import dayjs from 'dayjs';
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
-
 const humanizeDate = (date, format) => {
   if (date) {
     return dayjs(date).format(format);
@@ -58,4 +56,4 @@ const countWaypointDuration = ({date: {start, close}}) => {
   return dayjs(close).diff(dayjs(start));
 };
 
-export {generateId, humanizeDate, calculateDuration, sortDateUp, sortTimeUp, sortPriceUp, isWaypointFuture, isWaypointPast, countWaypointDuration};
+export {humanizeDate, calculateDuration, sortDateUp, sortTimeUp, sortPriceUp, isWaypointFuture, isWaypointPast, countWaypointDuration};

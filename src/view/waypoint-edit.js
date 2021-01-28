@@ -48,15 +48,19 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
     date: {start: startDate, close: closeDate},
     price,
     isOffers,
+    isDisabled,
+    isSaving,
+    isDeleting
   } = data;
   const typeList = createWaypointTypeListTemplate(type);
   const optionList = createDestinationOptionsTemplate(destinationList);
   const startTime = humanizeDate(startDate, TIME_FORMAT);
   const closeTime = humanizeDate(closeDate, TIME_FORMAT);
-  const offersSection = createOffersSectionTemplate(type, offers, isOffers, offerList);
+  const offersSection = createOffersSectionTemplate(type, offers, isOffers, offerList, isDisabled);
   const destinationSection = createDestinationSectionTemplate(destination);
   const rolldownBtn = !isCreate ? createRolldownBtnTemplate() : ``;
   const close = isCreate ? `Cancel` : `Delete`;
+  const closing = isCreate ? `Canceling` : `Deleting`;
 
   return (
     `<form class="event event--edit" action="#" method="post">
@@ -70,6 +74,7 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
             class="event__type-toggle  visually-hidden"
             id="event-type-toggle-1"
             type="checkbox"
+            ${isDisabled ? `disabled` : ``}
           />
           ${typeList}
         </div>
@@ -87,6 +92,7 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
             list="destination-list-1"
             autocomplete="off"
             required
+            ${isDisabled ? `disabled` : ``}
           />
           <datalist id="destination-list-1">
             ${optionList}
@@ -102,6 +108,7 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
             name="event-start-time"
             value="${he.encode(startTime)}"
             required
+            ${isDisabled ? `disabled` : ``}
           />
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -112,6 +119,7 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
             name="event-end-time"
             value="${he.encode(closeTime)}"
             required
+            ${isDisabled ? `disabled` : ``}
           />
         </div>
 
@@ -128,11 +136,12 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
             value="${price}"
             min="0"
             required
+            ${isDisabled ? `disabled` : ``}
           />
         </div>
 
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">${close}</button>
+        <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving` : `Save`}</button>
+        <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? closing : close}</button>
         ${rolldownBtn}
       </header>
       <section class="event__details">
@@ -233,7 +242,10 @@ export default class WaypointEditor extends SmartView {
                 isDescription: waypoint.destination.description !== null && waypoint.destination.description !== ``,
                 isPhoto: waypoint.destination.pictures !== null && waypoint.destination.pictures.length > 0
               }
-          )
+          ),
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
         }
     );
   }
@@ -244,6 +256,9 @@ export default class WaypointEditor extends SmartView {
     delete data.isOffers;
     delete data.destination.isDescription;
     delete data.destination.isPhoto;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
 
     return data;
   }

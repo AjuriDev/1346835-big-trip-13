@@ -3,7 +3,7 @@ import TripSortView from '../view/trip-sort.js';
 import WaypointsListView from '../view/waypoints-list.js';
 import NewWaypointMessageView from '../view/new-waypoint-message.js';
 import LoadingView from "../view/loading.js";
-import WaypointPresenter from './waypoint.js';
+import WaypointPresenter, {State as WaypointPresenterViewState} from './waypoint.js';
 import WaypointNewPresenter from "./new-waypoint.js";
 import {sortDateUp, sortTimeUp, sortPriceUp} from '../util/waypoint.js';
 import {filter} from "../util/filter.js";
@@ -69,16 +69,36 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_WAYPOINT:
-        this._api.updateWaypoint(update).then((response) => {
-          this._waypointsModel.updateWaypoint(updateType, response);
-        });
+        this._waypointPresenter[update.id].setViewState(WaypointPresenterViewState.SAVING);
+        this._api.updateWaypoint(update)
+          .then((response) => {
+            this._waypointsModel.updateWaypoint(updateType, response);
+          })
+          .catch(() => {
+            this._waypointPresenter[update.id].setViewState(WaypointPresenterViewState.ABORTING);
+          });
         break;
       case UserAction.ADD_WAYPOINT:
-        this._waypointsModel.addWaypoint(updateType, update);
+        this._waypointNewPresenter.setSaving();
+        this._api.addWaypoint(update)
+          .then((response) => {
+            this._waypointsModel.addWaypoint(updateType, response);
+          })
+          .catch(() => {
+            this._waypointNewPresenter.setAborting();
+          });
+
         this._newWaypointBtn.activate();
         break;
       case UserAction.DELETE_WAYPOINT:
-        this._waypointsModel.deleteWaypoint(updateType, update);
+        this._waypointPresenter[update.id].setViewState(WaypointPresenterViewState.DELETING);
+        this._api.deleteWaypoint(update)
+          .then(() => {
+            this._waypointsModel.deleteWaypoint(updateType, update);
+          })
+          .catch(() => {
+            this._waypointPresenter[update.id].setViewState(WaypointPresenterViewState.ABORTING);
+          });
         break;
     }
   }

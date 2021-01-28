@@ -231,18 +231,6 @@ main {
   line-height: 25px;
   text-align: center; }
 
-.trip-info__msg {
-  margin: 0;
-  margin-bottom: 35px;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 60px;
-  text-align: center;
-  color: #ffffff;
-  opacity: 0.89; }
-  .trip-events__msg--hidden {
-    display: none; }
-
 .trip-tabs {
   display: -ms-flexbox;
   display: flex;
@@ -987,3 +975,28 @@ main {
 
 .statistics__item:not(:last-child) {
   margin-bottom: 78px; }
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+.shake {
+  animation: shake 0.6s;
+}

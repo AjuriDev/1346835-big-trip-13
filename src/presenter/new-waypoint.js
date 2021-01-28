@@ -1,5 +1,4 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
-import {generateId} from "../util/waypoint.js";
 import {render, remove} from '../util/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
@@ -43,13 +42,31 @@ export default class WaypointNew {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
+  setSaving() {
+    this._waypointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._waypointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._waypointEditComponent.shake(resetFormState);
+  }
+
   _handleEditFormSubmit(waypoint) {
     this._changeData(
         UserAction.ADD_WAYPOINT,
         UpdateType.MAJOR,
-        Object.assign({id: generateId()}, waypoint)
+        waypoint
     );
-    this.destroy();
   }
 
   _handleDeleteClick() {
