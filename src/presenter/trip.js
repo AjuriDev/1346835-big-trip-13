@@ -74,11 +74,16 @@ export default class Trip {
         });
         break;
       case UserAction.ADD_WAYPOINT:
-        this._waypointsModel.addWaypoint(updateType, update);
+        this._api.addWaypoint(update).then((response) => {
+          this._waypointsModel.addWaypoint(updateType, response);
+        });
+
         this._newWaypointBtn.activate();
         break;
       case UserAction.DELETE_WAYPOINT:
-        this._waypointsModel.deleteWaypoint(updateType, update);
+        this._api.deleteWaypoint(update).then(() => {
+          this._waypointsModel.deleteWaypoint(updateType, update);
+        });
         break;
     }
   }

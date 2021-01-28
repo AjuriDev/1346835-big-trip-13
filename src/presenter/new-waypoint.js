@@ -1,5 +1,4 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
-import {generateId} from "../util/waypoint.js";
 import {render, remove} from '../util/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
@@ -47,7 +46,7 @@ export default class WaypointNew {
     this._changeData(
         UserAction.ADD_WAYPOINT,
         UpdateType.MAJOR,
-        Object.assign({id: generateId()}, waypoint)
+        waypoint
     );
     this.destroy();
   }
