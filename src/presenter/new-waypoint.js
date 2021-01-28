@@ -42,13 +42,31 @@ export default class WaypointNew {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
+  setSaving() {
+    this._waypointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._waypointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._waypointEditComponent.shake(resetFormState);
+  }
+
   _handleEditFormSubmit(waypoint) {
     this._changeData(
         UserAction.ADD_WAYPOINT,
         UpdateType.MAJOR,
         waypoint
     );
-    this.destroy();
   }
 
   _handleDeleteClick() {
