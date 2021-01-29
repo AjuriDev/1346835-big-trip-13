@@ -215,7 +215,7 @@ export default class WaypointEditor extends SmartView {
   }
 
   _updateOffers(title) {
-    let offers = this._data.offers.slice();
+    const offers = this._data.offers.slice();
     const toggledOffer = offers.findIndex((offer) => offer.title === title);
 
     if (toggledOffer !== -1) {

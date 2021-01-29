@@ -3,7 +3,6 @@ const path = require('path');
 module.exports = {
   entry: [
     './src/api.js',
-    './src/util/common.js',
     './src/util/render.js',
     './src/util/waypoint.js',
     './src/util/observer.js',

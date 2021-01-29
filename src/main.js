@@ -28,7 +28,6 @@ const tripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 const siteMainElement = document.querySelector(`.page-main`);
 const pageContainerElement = siteMainElement.querySelector(`.page-body__container`);
 
-// добавляем кнопку "Новая точка маршрута"
 const newWaypointComponent = new NewWaypointBtn();
 
 const handleNewWaypointClick = () => {
@@ -38,8 +37,6 @@ const handleNewWaypointClick = () => {
   tripPresenter.createWaypoint();
   siteMenuComponent.toggleSiteMenuItem();
 };
-
-// добавляем блоки "Меню" и "Фильтры"
 
 const tripControls = new TripControlsView();
 const siteMenuComponent = new SiteMenuView();
@@ -68,7 +65,7 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const tripPresenter = new TripPresenter(pageContainerElement, newWaypointComponent, waypointsModel, filterModel, api);
-const filterPresenter = new FilterPresenter(tripControls, filterModel);
+const filterPresenter = new FilterPresenter(tripControls, waypointsModel, filterModel);
 const infoPresenter = new InfoPresenter(tripMainElement, waypointsModel);
 
 tripPresenter.init();

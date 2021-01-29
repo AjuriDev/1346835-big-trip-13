@@ -1,7 +1,8 @@
 import AbstractView from './abstract.js';
 
-const createFilterItemTemplate = (filter, currentFilterType) => {
+const createFilterItemTemplate = (filter, currentFilterType, filterCondition) => {
   const {type, name} = filter;
+  const isDisabled = !filterCondition[type];
 
   return (
     `<div class="trip-filters__filter">
@@ -12,15 +13,16 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
         name="trip-filter"
         value="${type}"
         ${type === currentFilterType ? `checked` : ``}
+        ${isDisabled ? `disabled` : ``}
       />
       <label class="trip-filters__filter-label" for="filter-${type}">${name}</label>
     </div>`
   );
 };
 
-const createFiltersTemplate = (filters, currentFilterType) => {
+const createFiltersTemplate = (filters, currentFilterType, filterCondition) => {
   const filterItemsTemplate = filters
-    .map((filter) => createFilterItemTemplate(filter, currentFilterType))
+    .map((filter) => createFilterItemTemplate(filter, currentFilterType, filterCondition))
     .join(``);
 
   return (
@@ -33,17 +35,18 @@ const createFiltersTemplate = (filters, currentFilterType) => {
 };
 
 export default class TripFilters extends AbstractView {
-  constructor(filters, currentFilterType) {
+  constructor(filters, currentFilterType, filterCondition) {
     super();
     this._element = null;
     this._filters = filters;
     this._currentFilter = currentFilterType;
+    this._filterCondition = filterCondition;
 
     this._onfilterTypeChange = this._onfilterTypeChange.bind(this);
   }
 
   _getTemplate() {
-    return createFiltersTemplate(this._filters, this._currentFilter);
+    return createFiltersTemplate(this._filters, this._currentFilter, this._filterCondition);
   }
 
   _onfilterTypeChange(evt) {

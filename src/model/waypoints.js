@@ -1,4 +1,6 @@
 import Observer from '../util/observer.js';
+import {FilterType} from '../const';
+import {filter} from "../util/filter.js";
 
 export default class Waypoints extends Observer {
   constructor() {
@@ -72,6 +74,14 @@ export default class Waypoints extends Observer {
     ];
 
     this._notify(updateType);
+  }
+
+  checkWaypointsByDate() {
+    return {
+      everything: filter[FilterType.EVERYTHING](this._waypoints).length > 0,
+      past: filter[FilterType.PAST](this._waypoints).length > 0,
+      future: filter[FilterType.FUTURE](this._waypoints).length > 0
+    };
   }
 
   static adaptToClient(waypoint) {

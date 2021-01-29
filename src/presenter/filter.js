@@ -3,8 +3,9 @@ import {render, RenderPosition, replace, remove} from '../util/render.js';
 import {FilterType, UpdateType} from '../const.js';
 
 export default class Filter {
-  constructor(filterContainer, filterModel) {
+  constructor(filterContainer, waypointsModel, filterModel) {
     this._filterContainer = filterContainer;
+    this._waypointsModel = waypointsModel;
     this._filterModel = filterModel;
     this._currentFilter = null;
 
@@ -13,6 +14,7 @@ export default class Filter {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
+    this._waypointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
@@ -22,7 +24,9 @@ export default class Filter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._currentFilter);
+    const filterCondition = this._waypointsModel.checkWaypointsByDate();
+
+    this._filterComponent = new FilterView(filters, this._currentFilter, filterCondition);
     this._filterComponent.setOnFilterTypeChange(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
