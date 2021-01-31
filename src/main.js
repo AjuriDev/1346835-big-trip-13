@@ -7,14 +7,24 @@ import FilterPresenter from './presenter/filter.js';
 import InfoPresenter from './presenter/info.js';
 import WaypointsModel from './model/waypoints.js';
 import FilterModel from './model/filter.js';
+import {isOnline} from './util/common.js';
 import {render, remove, RenderPosition} from './util/render.js';
+import {toast} from './util/toast/toast.js';
 import {MenuItem, UpdateType} from './const.js';
 import Api from './api/api.js';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
 
 const AUTHORIZATION = `Basic 112358`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const STORE_PREFIX = `bigtrip-localstorage`;
+const STORE_VER = `v13`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const api = new Api(END_POINT, AUTHORIZATION);
+
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 let statisticsComponent = null;
 
@@ -34,8 +44,14 @@ const handleNewWaypointClick = () => {
   remove(statisticsComponent);
   tripPresenter.destroy();
   tripPresenter.init();
-  tripPresenter.createWaypoint();
   siteMenuComponent.toggleSiteMenuItem();
+
+  if (!isOnline()) {
+    toast(`You can't create new task offline`);
+    return;
+  }
+
+  tripPresenter.createWaypoint();
 };
 
 const tripControls = new TripControlsView();
@@ -64,13 +80,13 @@ const handleSiteMenuClick = (menuItem) => {
   siteMenuComponent.toggleSiteMenuItem(menuItem);
 };
 
-const tripPresenter = new TripPresenter(pageContainerElement, newWaypointComponent, waypointsModel, filterModel, api);
+const tripPresenter = new TripPresenter(pageContainerElement, newWaypointComponent, waypointsModel, filterModel, apiWithProvider);
 const filterPresenter = new FilterPresenter(tripControls, waypointsModel, filterModel);
 const infoPresenter = new InfoPresenter(tripMainElement, waypointsModel);
 
 tripPresenter.init();
 
-Promise.all([api.getWaypoints(), api.getDestinations(), api.getOffers()])
+Promise.all([apiWithProvider.getWaypoints(), apiWithProvider.getDestinations(), apiWithProvider.getOffers()])
   .then(([waypoints, destinations, offers]) => {
     waypointsModel.setDestinations(destinations);
     waypointsModel.setOffers(offers);
@@ -82,10 +98,7 @@ Promise.all([api.getWaypoints(), api.getDestinations(), api.getOffers()])
     render(tripMainElement, newWaypointComponent, RenderPosition.AFTERBEGIN);
     newWaypointComponent.setOnNewWaypointClick(handleNewWaypointClick);
 
-    if (waypoints.length > 0) {
-      infoPresenter.init();
-    }
-
+    infoPresenter.init();
     filterPresenter.init();
   })
   .catch(() => {
@@ -104,4 +117,13 @@ Promise.all([api.getWaypoints(), api.getDestinations(), api.getOffers()])
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
 });

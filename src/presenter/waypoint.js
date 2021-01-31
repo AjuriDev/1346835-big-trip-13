@@ -1,6 +1,8 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
 import TripWaypointView from '../view/trip-waypoint.js';
+import {isOnline} from '../util/common.js';
 import {render, replace, remove, RenderPosition} from '../util/render.js';
+import {toast} from '../util/toast/toast.js';
 import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
@@ -130,6 +132,11 @@ export default class Waypoint {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      toast(`You can't edit waypoint offline`);
+      return;
+    }
+
     this._replaceCardToForm();
   }
 
@@ -153,6 +160,11 @@ export default class Waypoint {
   }
 
   _handleEditFormSubmit(waypoint) {
+    if (!isOnline()) {
+      toast(`You can't save waypoint offline`);
+      return;
+    }
+
     this._changeData(
         UserAction.UPDATE_WAYPOINT,
         UpdateType.MINOR,
@@ -161,6 +173,11 @@ export default class Waypoint {
   }
 
   _handleDeleteClick(waypoint) {
+    if (!isOnline()) {
+      toast(`You can't delete waypoint offline`);
+      return;
+    }
+
     this._changeData(
         UserAction.DELETE_WAYPOINT,
         UpdateType.MINOR,

@@ -1,11 +1,12 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
+import {isOnline} from '../util/common.js';
 import {render, remove} from '../util/render.js';
+import {toast} from '../util/toast/toast.js';
 import {UserAction, UpdateType} from '../const.js';
 
 export default class WaypointNew {
-  constructor(waypointsListContainer, newWaypointBtn, changeData, destinations, destinationNames, offers) {
+  constructor(waypointsListContainer, changeData, destinations, destinationNames, offers) {
     this._waypointsListContainer = waypointsListContainer;
-    this._newWaypointBtn = newWaypointBtn;
     this._changeData = changeData;
     this._destinations = destinations;
     this._destinationNames = destinationNames;
@@ -63,6 +64,11 @@ export default class WaypointNew {
   }
 
   _handleEditFormSubmit(waypoint) {
+    if (!isOnline()) {
+      toast(`You can't create waypoint offline`);
+      return;
+    }
+
     this._changeData(
         UserAction.ADD_WAYPOINT,
         UpdateType.MAJOR,
@@ -71,15 +77,13 @@ export default class WaypointNew {
   }
 
   _handleDeleteClick() {
-    this.destroy();
-    this._newWaypointBtn.activate();
+    this._changeData(UserAction.CANCEL_WAYPOINT);
   }
 
   _onEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
-      this.destroy();
-      this._newWaypointBtn.activate();
+      this._changeData(UserAction.CANCEL_WAYPOINT);
     }
   }
 }

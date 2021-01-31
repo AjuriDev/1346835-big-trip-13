@@ -64,6 +64,15 @@ export default class Trip {
     this._newWaypointBtn.disable();
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+
+    remove(this._newWaypointMessageComponent);
+
+    if (this._sortComponent === null || this._waypointListComponent === null) {
+      this._renderSort();
+      this._renderWaypointsList();
+    }
+
+    this._waypointNewPresenter = new WaypointNewPresenter(this._waypointListComponent, this._handleViewAction, this._destinations, this._destinationNames, this._offers);
     this._waypointNewPresenter.init();
   }
 
@@ -100,6 +109,11 @@ export default class Trip {
           .catch(() => {
             this._waypointPresenter[update.id].setViewState(WaypointPresenterViewState.ABORTING);
           });
+        break;
+      case UserAction.CANCEL_WAYPOINT:
+        this._clearTrip();
+        this._renderTrip();
+        this._newWaypointBtn.activate();
         break;
     }
   }
@@ -186,7 +200,7 @@ export default class Trip {
     this._waypointPresenter[waypoint.id] = waypointPresenter;
   }
 
-  _renderWaypointsList(waypoints) {
+  _renderWaypointsList(waypoints = []) {
     if (this._waypointListComponent !== null) {
       this._waypointListComponent = null;
     }
@@ -221,8 +235,12 @@ export default class Trip {
     this._waypointPresenter = {};
 
     remove(this._sortComponent);
+    remove(this._waypointListComponent);
     remove(this._newWaypointMessageComponent);
     remove(this._loadingComponent);
+
+    this._sortComponent = null;
+    this._waypointListComponent = null;
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -245,6 +263,6 @@ export default class Trip {
       this._renderNewWaypointMessage();
     }
 
-    this._waypointNewPresenter = new WaypointNewPresenter(this._waypointListComponent, this._newWaypointBtn, this._handleViewAction, this._destinations, this._destinationNames, this._offers);
+    this._waypointNewPresenter = new WaypointNewPresenter(this._waypointListComponent, this._handleViewAction, this._destinations, this._destinationNames, this._offers);
   }
 }

@@ -23,8 +23,6 @@ export default class Info {
   }
 
   init() {
-    render(this._infoContainer, this._infoComponent);
-
     this._waypointsModel.addObserver(this._handleModelEvent);
 
     this._renderInfo();
@@ -109,15 +107,17 @@ export default class Info {
     remove(this._infoTitleComponent);
     remove(this._infoMainComponent);
     remove(this._infoCostComponent);
+    remove(this._infoComponent);
   }
 
   _renderInfo() {
-
     const waypoints = this._getWaypoints();
 
     if (!waypoints.length > 0) {
       return;
     }
+
+    render(this._infoContainer, this._infoComponent);
 
     this._renderInfoMain(waypoints);
     this._renderInfoCost(waypoints);
