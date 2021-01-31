@@ -42,20 +42,20 @@ export default class TripFilters extends AbstractView {
     this._currentFilter = currentFilterType;
     this._filterCondition = filterCondition;
 
-    this._onfilterTypeChange = this._onfilterTypeChange.bind(this);
+    this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
   }
 
   _getTemplate() {
     return createFiltersTemplate(this._filters, this._currentFilter, this._filterCondition);
   }
 
-  _onfilterTypeChange(evt) {
+  _onFilterTypeChange(evt) {
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.value);
   }
 
   setOnFilterTypeChange(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener(`change`, this._onfilterTypeChange);
+    this.getElement().addEventListener(`change`, this._onFilterTypeChange);
   }
 }

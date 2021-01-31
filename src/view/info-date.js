@@ -6,7 +6,7 @@ const MONTH_LETTERS_NUMBER = 3;
 const MONTH_DROP_LETTERS_NUMBER = 4;
 
 const isSameMonth = (start, close) => {
-  return start.slice(0, MONTH_LETTERS_NUMBER) === close.slice(0, MONTH_LETTERS_NUMBER) ? true : false;
+  return start.slice(0, MONTH_LETTERS_NUMBER) === close.slice(0, MONTH_LETTERS_NUMBER);
 };
 
 const createInfoDateTemplate = (waypoints) => {

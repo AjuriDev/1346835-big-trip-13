@@ -22,6 +22,7 @@ export default class Trip {
     this._isLoading = true;
 
     this._destinations = [];
+    this._destinationNames = [];
     this._offers = [];
 
     this._sortComponent = null;
@@ -180,7 +181,7 @@ export default class Trip {
   }
 
   _renderWaypoint(waypoint) {
-    const waypointPresenter = new WaypointPresenter(this._waypointListComponent, this._handleViewAction, this._handleModeChange, this._destinations, this._offers);
+    const waypointPresenter = new WaypointPresenter(this._waypointListComponent, this._handleViewAction, this._handleModeChange, this._destinations, this._destinationNames, this._offers);
     waypointPresenter.init(waypoint);
     this._waypointPresenter[waypoint.id] = waypointPresenter;
   }
@@ -191,6 +192,7 @@ export default class Trip {
     }
 
     this._destinations = this._getDestinations();
+    this._destinationNames = this._destinations.map((destination) => destination.name);
     this._offers = this._getOffers();
 
     this._waypointListComponent = new WaypointsListView();

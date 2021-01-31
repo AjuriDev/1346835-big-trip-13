@@ -1,9 +1,9 @@
-const isValidDestination = (destinations, destinationName) => {
-  return destinations.map((destination) => destination.name).includes(destinationName);
+const isValidDestination = (destinationNames, destinationName) => {
+  return destinationNames.includes(destinationName);
 };
 
-const getDestination = (destinations, destinationName) => {
-  if (!isValidDestination(destinations, destinationName)) {
+const getDestination = (destinations, destinationNames, destinationName) => {
+  if (!isValidDestination(destinationNames, destinationName)) {
     return {
       name: destinationName,
       description: ``,

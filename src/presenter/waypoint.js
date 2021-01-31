@@ -15,11 +15,12 @@ export const State = {
 };
 
 export default class Waypoint {
-  constructor(waypointsListContainer, changeData, changeMode, destinations, offers) {
+  constructor(waypointsListContainer, changeData, changeMode, destinations, destinationNames, offers) {
     this._waypointsListContainer = waypointsListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._destinations = destinations;
+    this._destinationNames = destinationNames;
     this._offers = offers;
 
     this._waypointComponent = null;
@@ -41,7 +42,7 @@ export default class Waypoint {
     const prevWaypointEditComponent = this._waypointEditComponent;
 
     this._waypointComponent = new TripWaypointView(this._waypoint, this._offers);
-    this._waypointEditComponent = new WaypointEditorView(this._destinations, this._offers, this._waypoint);
+    this._waypointEditComponent = new WaypointEditorView(this._destinations, this._destinationNames, this._offers, this._waypoint);
 
     this._waypointComponent.setOnRollupBtnClick(this._handleEditClick);
     this._waypointComponent.setOnFavoriteBtnClick(this._handleFavoriteClick);

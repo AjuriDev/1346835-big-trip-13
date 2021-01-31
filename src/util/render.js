@@ -25,10 +25,6 @@ const render = (container, child, place = RenderPosition.BEFOREEND) => {
   }
 };
 
-const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 const replace = (newChild, oldChild) => {
   if (oldChild instanceof Abstract) {
     oldChild = oldChild.getElement();
@@ -68,7 +64,6 @@ const createElement = (template) => {
 };
 
 export {
-  renderTemplate,
   createElement,
   render,
   replace,

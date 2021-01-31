@@ -155,11 +155,12 @@ const createWaypointEditorTemplate = (data, isCreate, destinationList, offerList
 };
 
 export default class WaypointEditor extends SmartView {
-  constructor(destinations, offers, waypoint = BLANK_WAYPOINT) {
+  constructor(destinations, destinationNames, offers, waypoint = BLANK_WAYPOINT) {
     super();
     this._offers = offers;
     this._data = this._parseWaypointToData(waypoint);
     this._destinations = destinations;
+    this._destinationNames = destinationNames;
     this._element = null;
     this._datepickerStart = null;
     this._datepickerEnd = null;
@@ -322,11 +323,11 @@ export default class WaypointEditor extends SmartView {
 
   _onDestinationChange(evt) {
     const inputDestination = evt.target;
-    const destination = getDestination(this._destinations, inputDestination.value);
+    const destination = getDestination(this._destinations, this._destinationNames, inputDestination.value);
 
     inputDestination.setCustomValidity(``);
 
-    if (isValidDestination(this._destinations, inputDestination.value)) {
+    if (isValidDestination(this._destinationNames, inputDestination.value)) {
       this.updateData({
         destination: Object.assign(
             {},
