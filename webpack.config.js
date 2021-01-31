@@ -2,12 +2,15 @@ const path = require('path');
 
 module.exports = {
   entry: [
-    './src/api.js',
+    './src/api/api.js',
     './src/util/render.js',
     './src/util/waypoint.js',
     './src/util/observer.js',
     './src/util/destination.js',
     './src/util/statistics.js',
+    './src/util/common.js',
+    './src/util/toast/toast.js',
+    './src/util/toast/toast.css',
     './src/const.js',
     './src/model/waypoints.js',
     './src/model/filter.js',

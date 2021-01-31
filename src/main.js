@@ -9,7 +9,7 @@ import WaypointsModel from './model/waypoints.js';
 import FilterModel from './model/filter.js';
 import {render, remove, RenderPosition} from './util/render.js';
 import {MenuItem, UpdateType} from './const.js';
-import Api from './api.js';
+import Api from './api/api.js';
 
 const AUTHORIZATION = `Basic 112358`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
@@ -101,3 +101,7 @@ Promise.all([api.getWaypoints(), api.getDestinations(), api.getOffers()])
 
     filterPresenter.init();
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});

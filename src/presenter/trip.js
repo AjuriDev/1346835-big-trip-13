@@ -238,13 +238,13 @@ export default class Trip {
     const waypoints = this._getWaypoints();
     const waypointsCount = waypoints.length;
 
-    this._waypointNewPresenter = new WaypointNewPresenter(this._waypointListComponent, this._newWaypointBtn, this._handleViewAction, this._destinations, this._offers);
-
     if (waypointsCount > 0) {
       this._renderSort();
       this._renderWaypointsList(waypoints);
     } else {
       this._renderNewWaypointMessage();
     }
+
+    this._waypointNewPresenter = new WaypointNewPresenter(this._waypointListComponent, this._newWaypointBtn, this._handleViewAction, this._destinations, this._destinationNames, this._offers);
   }
 }

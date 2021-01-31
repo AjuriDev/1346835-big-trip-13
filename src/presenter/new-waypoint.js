@@ -3,11 +3,12 @@ import {render, remove} from '../util/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
 export default class WaypointNew {
-  constructor(waypointsListContainer, newWaypointBtn, changeData, destinations, offers) {
+  constructor(waypointsListContainer, newWaypointBtn, changeData, destinations, destinationNames, offers) {
     this._waypointsListContainer = waypointsListContainer;
     this._newWaypointBtn = newWaypointBtn;
     this._changeData = changeData;
     this._destinations = destinations;
+    this._destinationNames = destinationNames;
     this._offers = offers;
 
     this._waypointEditComponent = null;
@@ -22,7 +23,7 @@ export default class WaypointNew {
       return;
     }
 
-    this._waypointEditComponent = new WaypointEditorView(this._destinations, this._offers);
+    this._waypointEditComponent = new WaypointEditorView(this._destinations, this._destinationNames, this._offers);
 
     this._waypointEditComponent.setOnEditFormSubmit(this._handleEditFormSubmit);
     this._waypointEditComponent.setOnDeleteBtnClick(this._handleDeleteClick);
