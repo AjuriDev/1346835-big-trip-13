@@ -2,7 +2,7 @@ import WaypointEditorView from '../view/waypoint-edit.js';
 import TripWaypointView from '../view/trip-waypoint.js';
 import {isOnline} from '../util/common.js';
 import {render, replace, remove, RenderPosition} from '../util/render.js';
-import {toast} from '../util/toast/toast.js';
+import {toast} from '../util/offline/offline.js';
 import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {

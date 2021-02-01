@@ -9,13 +9,13 @@ import WaypointsModel from './model/waypoints.js';
 import FilterModel from './model/filter.js';
 import {isOnline} from './util/common.js';
 import {render, remove, RenderPosition} from './util/render.js';
-import {toast} from './util/toast/toast.js';
+import {setOffline, removeOffline, toast} from './util/offline/offline.js';
 import {MenuItem, UpdateType} from './const.js';
 import Api from './api/api.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
 
-const AUTHORIZATION = `Basic 112358`;
+const AUTHORIZATION = `Basic wrhstjfkutrw264yrgffvw`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v13`;
@@ -68,9 +68,11 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statisticsComponent);
       tripPresenter.destroy();
       tripPresenter.init();
+      newWaypointComponent.activate();
       break;
     case MenuItem.STATS:
       tripPresenter.destroy();
+      newWaypointComponent.activate();
       remove(statisticsComponent);
       statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
       render(pageContainerElement, statisticsComponent);
@@ -121,9 +123,11 @@ window.addEventListener(`load`, () => {
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
+  removeOffline();
   apiWithProvider.sync();
 });
 
 window.addEventListener(`offline`, () => {
   document.title += ` [offline]`;
+  setOffline();
 });

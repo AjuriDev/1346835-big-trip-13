@@ -32,6 +32,11 @@ export default class SiteMenu extends AbstractView {
 
   _onSiteMenuClick(evt) {
     evt.preventDefault();
+
+    if (evt.target.classList.contains(`trip-tabs__btn--active`)) {
+      return;
+    }
+
     this._callback.menuClick(evt.target.dataset.name);
   }
 

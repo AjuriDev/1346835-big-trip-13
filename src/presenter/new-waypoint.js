@@ -1,7 +1,7 @@
 import WaypointEditorView from '../view/waypoint-edit.js';
 import {isOnline} from '../util/common.js';
 import {render, remove} from '../util/render.js';
-import {toast} from '../util/toast/toast.js';
+import {toast} from '../util/offline/offline.js';
 import {UserAction, UpdateType} from '../const.js';
 
 export default class WaypointNew {
